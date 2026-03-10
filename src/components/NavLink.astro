@@ -1,0 +1,31 @@
+---
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+const pathname = Astro.url.pathname;
+const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+---
+
+<a href={href} class:list={["nav-link", { active: isActive }]}>{label}</a>
+
+<style>
+  .nav-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .nav-link.active {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+</style>

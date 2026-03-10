@@ -1,0 +1,51 @@
+---
+interface Props {
+  name: string;
+  entities: string[];
+  article?: string;
+}
+
+const { name, entities, article } = Astro.props;
+---
+
+<div class="entity-card">
+  <h4 class="card-title">{name}</h4>
+  {article && <span class="card-article">{article}</span>}
+  <div class="card-entities">
+    {entities.map((e) => <code class="entity-tag">{e}</code>)}
+  </div>
+</div>
+
+<style>
+  .entity-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+  }
+  .card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+    color: var(--color-text);
+  }
+  .card-article {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+  .card-entities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .entity-tag {
+    font-size: 0.68rem;
+    padding: 1px 5px;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    color: var(--color-text-secondary);
+  }
+</style>

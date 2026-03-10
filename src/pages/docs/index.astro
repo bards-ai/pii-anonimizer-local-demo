@@ -1,0 +1,85 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { DOCS_META } from '../../consts';
+
+const ICONS: Record<string, string> = {
+	tag: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+	chart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+	code: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+};
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title="Documentation — PII Anonymizer" description="Documentation for the PII Anonymizer model: entity categories, model card, and integration guide." />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="docs-index">
+				<h1>Documentation</h1>
+				<p class="docs-intro">
+					Learn about the entity categories, model architecture, and how to integrate
+					<strong>bardsai/eu-pii-anonimization</strong> into your applications.
+				</p>
+				<div class="docs-grid">
+					{DOCS_META.map((doc) => (
+						<a href={`/docs/${doc.slug}`} class="doc-card card">
+							<div class="doc-icon" set:html={ICONS[doc.icon]} />
+							<h3>{doc.title}</h3>
+							<p>{doc.description}</p>
+						</a>
+					))}
+				</div>
+			</div>
+		</main>
+		<Footer />
+
+		<style>
+			.docs-index {
+				max-width: 720px;
+				margin: 0 auto;
+			}
+			.docs-index h1 {
+				margin-bottom: var(--space-sm);
+			}
+			.docs-intro {
+				color: var(--color-text-secondary);
+				margin-bottom: var(--space-2xl);
+				font-size: 0.95rem;
+			}
+			.docs-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: var(--space-lg);
+			}
+			.doc-card {
+				text-decoration: none;
+				color: var(--color-text);
+				display: flex;
+				flex-direction: column;
+				gap: var(--space-sm);
+			}
+			.doc-card:hover {
+				text-decoration: none;
+			}
+			.doc-card h3 {
+				font-size: 1.1rem;
+				margin: 0;
+			}
+			.doc-card p {
+				font-size: 0.875rem;
+				color: var(--color-text-secondary);
+				margin: 0;
+				line-height: 1.5;
+			}
+			.doc-icon {
+				color: var(--color-text-secondary);
+				width: 24px;
+				height: 24px;
+			}
+		</style>
+	</body>
+</html>

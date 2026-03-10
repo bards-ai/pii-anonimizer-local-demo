@@ -1,0 +1,76 @@
+---
+title: "Model Card"
+description: "Architecture, performance metrics, training details, and limitations of bardsai/eu-pii-anonimization"
+order: 2
+---
+
+# Model Card
+
+**bardsai/eu-pii-anonimization** is a token classification model fine-tuned for detecting personally identifiable information (PII) in Polish text, aligned with EU GDPR definitions.
+
+## Model Details
+
+| Property | Value |
+|---|---|
+| **Base model** | XLM-RoBERTa |
+| **Task** | Token classification (NER) |
+| **Labels** | 37 entity types, BIO tagging (75 labels) |
+| **Language** | Polish |
+| **License** | Apache 2.0 |
+| **Repository** | [bardsai/eu-pii-anonimization](https://huggingface.co/bardsai/eu-pii-anonimization) |
+
+## Architecture
+
+The model is based on **XLM-RoBERTa** with a token classification head. It uses BIO tagging scheme — each entity type has both B- (beginning) and I- (inside) labels, plus an O (outside) label.
+
+- **Parameters**: ~278M (XLM-RoBERTa base)
+- **Max sequence length**: 512 tokens
+- **Tokenizer**: SentencePiece (XLM-RoBERTa)
+
+## Performance
+
+The model achieves strong performance across all entity categories:
+
+| Metric | Score |
+|---|---|
+| **Overall F1** | ~95% |
+| **Precision** | ~94% |
+| **Recall** | ~95% |
+
+### Per-Category Performance
+
+Performance varies by entity type. Categories with more training examples (like `PERSON_NAME`, `POSTAL_ADDRESS`) tend to achieve higher F1 scores, while rarer categories (like `GENETIC_DATA`, `BIOMETRIC_DATA`) may have lower recall.
+
+**Strongest categories**: Personal Identity, Contact & Location, Government IDs
+
+**More challenging categories**: Health & Biometric (less training data), Special Categories (context-dependent)
+
+## Training
+
+- **Training data**: Curated dataset of Polish text with PII annotations
+- **Annotation**: Expert-annotated following GDPR Article 4 and Article 9 definitions
+- **Approach**: Fine-tuning XLM-RoBERTa with token-level classification
+
+## ONNX Support
+
+The model is available in ONNX format for efficient inference:
+- **Standard ONNX**: Full precision, highest accuracy
+- **Quantized ONNX**: INT8 quantized for faster inference with minimal accuracy loss
+
+This demo uses the ONNX quantized version via [Transformers.js](https://huggingface.co/docs/transformers.js) for browser-based inference.
+
+## Limitations
+
+- **Language**: Optimized for Polish text. Performance on other languages is not guaranteed.
+- **Context window**: Limited to 512 tokens per inference. Longer texts are split into chunks.
+- **Entity boundaries**: Compound entities (e.g., multi-part addresses) may occasionally be split into separate spans.
+- **Domain specificity**: Trained primarily on general-purpose text. Specialized domains (legal, medical) may have varying performance.
+- **False positives**: Common Polish names that also serve as regular words may be flagged incorrectly.
+- **Evolving PII**: New forms of PII (e.g., biometric identifiers) may not be fully captured.
+
+## Ethical Considerations
+
+- This model is a **detection tool**, not a guarantee of full anonymization
+- Always review detected entities before relying on them for compliance purposes
+- The model should be used as part of a broader data protection strategy
+- No data is transmitted externally — all inference runs locally in the browser

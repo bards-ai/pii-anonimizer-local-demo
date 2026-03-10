@@ -1,21 +1,34 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+  PII Anonymizer — Design System
+*/
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+	--color-primary: #18181b;
+	--color-primary-dark: #09090b;
+	--color-surface: #ffffff;
+	--color-surface-alt: #f9fafb;
+	--color-border: #e5e7eb;
+	--color-text: #18181b;
+	--color-text-secondary: #6b7280;
+	--color-success: #18181b;
+	--color-error: #18181b;
+
+	--space-xs: 0.25rem;
+	--space-sm: 0.5rem;
+	--space-md: 1rem;
+	--space-lg: 1.5rem;
+	--space-xl: 2rem;
+	--space-2xl: 3rem;
+	--space-3xl: 4rem;
+
+	--radius-sm: 5px;
+	--radius-md: 8px;
+	--radius-lg: 10px;
+
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+	--shadow-md: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
+
 @font-face {
 	font-family: "Atkinson";
 	src: url("/fonts/atkinson-regular.woff") format("woff");
@@ -30,126 +43,167 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
 	font-family: "Atkinson", sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	background: var(--color-surface);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
+	color: var(--color-text);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
 }
+
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
+	width: 960px;
+	max-width: calc(100% - 2rem);
 	margin: auto;
-	padding: 3em 1em;
+	padding: var(--space-lg) var(--space-md);
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+
+h1, h2, h3, h4, h5, h6 {
 	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
+	color: var(--color-text);
 	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
 	font-weight: 700;
 }
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+h5 { font-size: 1rem; }
+
+strong, b { font-weight: 700; }
+
 a {
-	color: var(--accent);
+	color: var(--color-text);
+	text-decoration: underline;
+	text-decoration-color: var(--color-border);
+	text-underline-offset: 2px;
 }
 a:hover {
-	color: var(--accent);
+	text-decoration-color: var(--color-text-secondary);
 }
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-input {
-	font-size: 16px;
-}
-table {
-	width: 100%;
-}
+
+p { margin-bottom: 1em; }
+.prose p { margin-bottom: 1.5em; }
+
+textarea { width: 100%; font-size: 15px; }
+input { font-size: 15px; }
+table { width: 100%; }
+
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
+	border-radius: var(--radius-md);
 }
+
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	background-color: var(--color-surface-alt);
+	border: 1px solid var(--color-border);
+	border-radius: 3px;
+	font-size: 0.85em;
 }
 pre {
-	padding: 1.5em;
-	border-radius: 8px;
+	padding: 1.25rem;
+	border-radius: var(--radius-md);
+	overflow-x: auto;
+	background: #1a1a2e;
+	color: #d4d4d8;
 }
-pre > code {
-	all: unset;
-}
+pre > code { all: unset; }
+
 blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+	border-left: 2px solid var(--color-border);
+	padding: 0 0 0 1.25rem;
+	margin: 0;
+	color: var(--color-text-secondary);
 }
+
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--color-border);
+	margin: var(--space-xl) 0;
 }
+
+/* Base component styles */
+.card {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-lg);
+	transition: border-color 0.15s;
+}
+.card:hover {
+	border-color: #d1d5db;
+}
+
+.btn {
+	border: none;
+	border-radius: var(--radius-md);
+	padding: 0.5rem 1rem;
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.12s;
+	font-family: inherit;
+	white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-sm);
+}
+.btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+.btn-primary {
+	background: var(--color-text);
+	color: white;
+}
+.btn-primary:hover:not(:disabled) {
+	background: var(--color-primary-dark);
+}
+.btn-secondary {
+	background: var(--color-text);
+	color: white;
+}
+.btn-secondary:hover:not(:disabled) {
+	background: var(--color-primary-dark);
+}
+.btn-outline {
+	background: transparent;
+	color: var(--color-text);
+	border: 1px solid var(--color-border);
+}
+.btn-outline:hover:not(:disabled) {
+	background: var(--color-surface-alt);
+	border-color: #d1d5db;
+}
+.btn-small {
+	padding: 0.25rem 0.55rem;
+	font-size: 0.75rem;
+}
+
 @media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+	body { font-size: 15px; }
+	main { padding: var(--space-lg) var(--space-md); }
+	h1 { font-size: 1.75rem; }
+	h2 { font-size: 1.25rem; }
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
+	border: 0; padding: 0; margin: 0;
 	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
+	height: 1px; width: 1px; overflow: hidden;
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }

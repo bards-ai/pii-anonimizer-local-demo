@@ -1,50 +1,1345 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import EntityCategoryCard from "../components/EntityCategoryCard.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const CATEGORIES = [
+  { name: "Personal Identity", article: "GDPR Art. 4(1)", entities: ["PERSON_NAME", "DATE_OF_BIRTH", "PERSON_ATTRIBUTE", "PERSON_ALIAS"] },
+  { name: "Contact & Location", article: "GDPR Art. 4(1)", entities: ["EMAIL_ADDRESS", "PHONE_NUMBER", "CONTACT_HANDLE", "POSTAL_ADDRESS", "LOCATION", "GEO_LOCATION"] },
+  { name: "Technical Identifiers", article: "GDPR Recital 30", entities: ["IP_ADDRESS", "DEVICE_IDENTIFIER", "COOKIE_IDENTIFIER", "ACCOUNT_IDENTIFIER", "AUTH_SECRET"] },
+  { name: "Financial", article: "GDPR Art. 4(1)", entities: ["BANK_ACCOUNT", "PAYMENT_CARD", "PAYMENT_CARD_METADATA", "FINANCIAL_TRANSACTION", "FINANCIAL_AMOUNT", "SALARY_COMPENSATION"] },
+  { name: "Government IDs", article: "GDPR Art. 87", entities: ["NATIONAL_ID_NUMBER", "PASSPORT_NUMBER", "DRIVER_LICENSE_NUMBER", "TAX_ID_NUMBER", "HEALTH_INSURANCE_ID", "RESIDENCE_PERMIT_NUMBER"] },
+  { name: "Health & Biometric", article: "GDPR Art. 9(1)", entities: ["HEALTH_DATA", "GENETIC_DATA", "BIOMETRIC_DATA"] },
+  { name: "Special Categories", article: "GDPR Art. 9(1)", entities: ["RELIGION_OR_BELIEF", "POLITICAL_OPINION", "SEXUAL_ORIENTATION", "TRADE_UNION_MEMBERSHIP", "ETHNIC_ORIGIN", "CRIMINAL_OFFENCE_DATA"] },
+  { name: "Employment", article: "GDPR Art. 88", entities: ["EMPLOYMENT_CONTEXT"] },
+];
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <p class="hero-kicker">Open-source &middot; Apache 2.0 &middot; 37 entity types &middot; runs locally</p>
+        <h1>Make your AI data processing EU&#8209;compliant</h1>
+        <p class="subtitle">
+          Detect and anonymize personal data before it enters your AI pipeline.
+          Covers all PII defined by GDPR Art.&nbsp;4(1), special categories under Art.&nbsp;9(1),
+          and meets the anonymization requirements of EU&nbsp;AI&nbsp;Act Art.&nbsp;10(5).
+          Built on <a href="https://huggingface.co/bardsai/eu-pii-anonimization" target="_blank" rel="noopener">bardsai/eu-pii-anonimization</a>,
+          an open-source XLM-RoBERTa token classifier running entirely in your browser via ONNX/WebAssembly &mdash; no data leaves your device.
+        </p>
+        <div class="language-grid">
+          <span class="lang-label">EU languages:</span>
+          <span class="lang-item lang-disabled">🇬🇧 English</span>
+          <span class="lang-item lang-active">🇵🇱 Polish</span>
+          <span class="lang-item lang-disabled">🇩🇪 German</span>
+          <span class="lang-item lang-disabled">🇫🇷 French</span>
+          <span class="lang-item lang-disabled">🇪🇸 Spanish</span>
+          <span class="lang-item lang-disabled">🇮🇹 Italian</span>
+          <span class="lang-item lang-disabled">🇳🇱 Dutch</span>
+          <span class="lang-item lang-disabled">🇵🇹 Portuguese</span>
+          <span class="lang-item lang-disabled">🇷🇴 Romanian</span>
+          <span class="lang-item lang-disabled">🇨🇿 Czech</span>
+          <span class="lang-item lang-disabled">🇸🇪 Swedish</span>
+          <span class="lang-item lang-disabled">🇬🇷 Greek</span>
+          <span class="lang-item lang-disabled">🇭🇺 Hungarian</span>
+          <span class="lang-item lang-disabled">🇧🇬 Bulgarian</span>
+          <span class="lang-item lang-disabled">🇭🇷 Croatian</span>
+          <span class="lang-item lang-disabled">🇩🇰 Danish</span>
+          <span class="lang-item lang-disabled">🇪🇪 Estonian</span>
+          <span class="lang-item lang-disabled">🇫🇮 Finnish</span>
+          <span class="lang-item lang-disabled">🇮🇪 Irish</span>
+          <span class="lang-item lang-disabled">🇱🇻 Latvian</span>
+          <span class="lang-item lang-disabled">🇱🇹 Lithuanian</span>
+          <span class="lang-item lang-disabled">🇲🇹 Maltese</span>
+          <span class="lang-item lang-disabled">🇸🇰 Slovak</span>
+          <span class="lang-item lang-disabled">🇸🇮 Slovenian</span>
+        </div>
+      </section>
+
+      <!-- Demo -->
+      <section class="demo-section" id="demo">
+        <div class="demo-card">
+          <div class="controls">
+            <div class="model-status" id="model-status">
+              <div class="status-text" id="status-text">Click to download the model from HuggingFace</div>
+              <div class="progress-bar-container" id="progress-container" style="display:none">
+                <div class="progress-bar" id="progress-bar"></div>
+              </div>
+            </div>
+            <button id="load-btn" class="btn btn-secondary">Download bardsai/eu-pii-anonimization</button>
+          </div>
+
+          <div class="input-section">
+            <div class="section-header">
+              <label for="input-text">Input Text</label>
+              <div class="sample-buttons">
+                <button class="btn btn-outline btn-small sample-btn" data-sample="1">Sample 1</button>
+                <button class="btn btn-outline btn-small sample-btn" data-sample="2">Sample 2</button>
+                <button class="btn btn-outline btn-small sample-btn" data-sample="3">Sample 3</button>
+              </div>
+            </div>
+            <textarea id="input-text" rows="6" placeholder="Wpisz tekst po polsku zawierający dane osobowe...">Pracownik Anna Wiśniewska, zatrudniona w dziale IT, otrzymuje wynagrodzenie w wysokości 12 500 PLN brutto. Numer paszportu: EP1234567. NIP firmy: 527-020-1234. Adres zamieszkania: ul. Piękna 22, 00-549 Warszawa. Wyznanie: katolicyzm. Przynależność związkowa: NSZZ.</textarea>
+            <button id="analyze-btn" class="btn btn-primary" disabled>Analyze</button>
+          </div>
+
+          <div class="output-section">
+            <div class="output-header">
+              <h3>Results <span class="preview-label" id="preview-label">preview</span></h3>
+              <div class="view-toggle" id="view-toggle" style="display:flex">
+                <button class="toggle-btn" data-view="anonymized">Anonymized</button>
+                <button class="toggle-btn active" data-view="highlighted">Highlighted</button>
+              </div>
+            </div>
+            <div id="output-anonymized" class="output-text" style="display:none">Pracownik <span class="anon-tag cat-identity" title="Was: Anna Wiśniewska (100%)">[PERSON_NAME]</span>, zatrudniona w dziale <span class="anon-tag cat-identity" title="Was: IT (85%)">[PERSON_ROLE_OR_TITLE]</span>, otrzymuje wynagrodzenie w wysokości <span class="anon-tag cat-financial" title="Was: 12 500 PLN brutto (91%)">[FINANCIAL_AMOUNT]</span>. Numer paszportu: <span class="anon-tag cat-identity" title="Was: EP1234567 (64%)">[ORGANIZATION_IDENTIFIER]</span>. NIP firmy: <span class="anon-tag cat-identity" title="Was: 527-020-1234 (100%)">[ORGANIZATION_IDENTIFIER]</span>. Adres zamieszkania: <span class="anon-tag cat-contact" title="Was: ul. Piękna 22, 00-549 (100%)">[POSTAL_ADDRESS]</span> <span class="anon-tag cat-contact" title="Was: Warszawa (89%)">[LOCATION]</span>. Wyznanie: <span class="anon-tag cat-special" title="Was: katolicyzm (100%)">[RELIGION_OR_BELIEF]</span>. Przynależność związkowa: <span class="anon-tag cat-special" title="Was: NSZZ (53%)">[TRADE_UNION_MEMBERSHIP]</span>.</div>
+            <div id="output-highlighted" class="output-text">Pracownik <mark class="entity cat-identity" title="PERSON_NAME (100%)">Anna Wiśniewska<span class="entity-label">PERSON_NAME</span></mark>, zatrudniona w dziale <mark class="entity cat-identity" title="PERSON_ROLE_OR_TITLE (85%)">IT<span class="entity-label">PERSON_ROLE_OR_TITLE</span></mark>, otrzymuje wynagrodzenie w wysokości <mark class="entity cat-financial" title="FINANCIAL_AMOUNT (91%)">12 500 PLN brutto<span class="entity-label">FINANCIAL_AMOUNT</span></mark>. Numer paszportu: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (64%)">EP1234567<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. NIP firmy: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (100%)">527-020-1234<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. Adres zamieszkania: <mark class="entity cat-contact" title="POSTAL_ADDRESS (100%)">ul. Piękna 22, 00-549<span class="entity-label">POSTAL_ADDRESS</span></mark> <mark class="entity cat-contact" title="LOCATION (89%)">Warszawa<span class="entity-label">LOCATION</span></mark>. Wyznanie: <mark class="entity cat-special" title="RELIGION_OR_BELIEF (100%)">katolicyzm<span class="entity-label">RELIGION_OR_BELIEF</span></mark>. Przynależność związkowa: <mark class="entity cat-special" title="TRADE_UNION_MEMBERSHIP (53%)">NSZZ<span class="entity-label">TRADE_UNION_MEMBERSHIP</span></mark>.</div>
+            <div id="entity-list" class="entity-list">
+              <h4>Detected Entities</h4>
+              <div id="entity-table-container"><table class="results-table"><thead><tr><th>Entity</th><th>Type</th><th>Regulation</th><th class="col-confidence">Confidence</th></tr></thead><tbody><tr><td><span class="entity-badge cat-identity">Anna Wiśniewska</span></td><td><code>PERSON_NAME</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-identity">IT</span></td><td><code>PERSON_ROLE_OR_TITLE</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">85%</td></tr><tr><td><span class="entity-badge cat-financial">12 500 PLN brutto</span></td><td><code>FINANCIAL_AMOUNT</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">91%</td></tr><tr><td><span class="entity-badge cat-identity">EP1234567</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">64%</td></tr><tr><td><span class="entity-badge cat-identity">527-020-1234</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">ul. Piękna 22, 00-549</span></td><td><code>POSTAL_ADDRESS</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">Warszawa</span></td><td><code>LOCATION</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">89%</td></tr><tr><td><span class="entity-badge cat-special">katolicyzm</span></td><td><code>RELIGION_OR_BELIEF</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-special">NSZZ</span></td><td><code>TRADE_UNION_MEMBERSHIP</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">53%</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Entity Categories -->
+      <section class="categories-section">
+        <h2>Entity taxonomy</h2>
+        <p class="section-desc">
+          37 entity types across 8 categories, mapped to specific GDPR articles.
+          Art.&nbsp;9(1) special categories (health, biometric, genetic, political, religious, ethnic, sexual orientation, trade union)
+          are flagged separately to support higher-risk processing rules.
+        </p>
+        <div class="categories-grid">
+          {CATEGORIES.map((cat) => (
+            <EntityCategoryCard name={cat.name} entities={cat.entities} article={cat.article} />
+          ))}
+        </div>
+        <p class="section-link">
+          <a href="/docs/entity-categories">Full entity reference &rarr;</a>
+        </p>
+      </section>
+
+      <!-- Regulatory context -->
+      <section class="regulation-section">
+        <h2>Regulatory context</h2>
+        <p class="section-desc">
+          This model addresses requirements from two EU regulations. Below are the specific provisions
+          that PII detection and anonymisation tools help satisfy.
+        </p>
+        <div class="reg-grid">
+          <div class="reg-block">
+            <h3>GDPR <span class="reg-id">(Regulation 2016/679)</span></h3>
+            <dl class="reg-list">
+              <div class="reg-item">
+                <dt>Art. 4(1) &mdash; Personal data</dt>
+                <dd>Defines the scope: any information relating to an identified or identifiable natural person. The 37 entity types in this model map directly to the identifiers listed here.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Art. 5(1)(c) &mdash; Data minimisation</dt>
+                <dd>Personal data must be adequate, relevant, and limited to what is necessary. Automated PII detection is a technical measure to enforce minimisation at scale.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Art. 9(1) &mdash; Special categories</dt>
+                <dd>Processing of health, biometric, genetic, racial/ethnic, political, religious, trade union, and sexual orientation data is prohibited by default. This model detects all eight special categories.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Art. 25 &mdash; Data protection by design</dt>
+                <dd>Controllers must implement appropriate technical measures, such as pseudonymisation, to implement data-protection principles. PII detection is a prerequisite for pseudonymisation.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Art. 32(1)(a) &mdash; Security of processing</dt>
+                <dd>Lists pseudonymisation and encryption as appropriate security measures. Automated PII detection enables systematic pseudonymisation of personal data.</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="reg-block">
+            <h3>EU AI Act <span class="reg-id">(Regulation 2024/1689)</span></h3>
+            <dl class="reg-list">
+              <div class="reg-item">
+                <dt>Art. 10(5) &mdash; Data governance for high-risk AI</dt>
+                <dd>Special-category personal data may only be used for bias detection when anonymised or synthetic data cannot fulfill the purpose. Requires &ldquo;state-of-the-art pseudonymisation&rdquo; when processing is necessary.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Art. 59 &mdash; AI regulatory sandboxes</dt>
+                <dd>Personal data in sandboxes may only be processed when anonymised or synthetic data is insufficient. Establishes an anonymisation-first principle for AI development.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Recital 69 &mdash; Privacy throughout AI lifecycle</dt>
+                <dd>Data minimisation and protection by design must be ensured throughout the entire AI lifecycle. Lists anonymisation and encryption as compliance measures.</dd>
+              </div>
+              <div class="reg-item">
+                <dt>Annex III, &sect;1 &mdash; High-risk: biometrics</dt>
+                <dd>Remote biometric identification and categorisation systems based on sensitive attributes are classified as high-risk, requiring additional compliance obligations.</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works (brief) -->
+      <!-- Use Case 1: LLM Inference -->
+      <section class="usecase-section">
+        <h2>LLM inference without PII exposure</h2>
+        <p class="usecase-desc">Send data to any third-party LLM safely. PII is replaced with indexed tokens before leaving your infrastructure, and restored in the final output.</p>
+
+        <div class="usecase-flow">
+          <div class="flow-cols">
+            <div class="flow-col">
+              <div class="flow-col-label">Your infrastructure</div>
+            </div>
+            <div class="flow-col flow-col-ext">
+              <div class="flow-col-label flow-col-label-ext">Third-party LLM</div>
+            </div>
+          </div>
+
+          <div class="flow-cols">
+            <div class="flow-col">
+              <div class="flow-step">
+                <div class="step-marker">1</div>
+                <div class="step-content">
+                  <div class="step-title">Original prompt</div>
+                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl">Jan Kowalski</span>, NIP <span class="hl">527-020-1234</span>, adres <span class="hl">ul. Marszałkowska 10/5, 00-001 Warszawa</span>, konto <span class="hl">PL61 1090 1014 0000 0712 1981 2874</span>, kwota <span class="hl">12 500 PLN</span></code>
+                </div>
+              </div>
+
+              <div class="flow-arrow">↓ <span>Anonymize</span></div>
+
+              <div class="flow-step">
+                <div class="step-marker">2</div>
+                <div class="step-content">
+                  <div class="step-title">Anonymized prompt</div>
+                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl-token">[PERSON_NAME_1]</span>, NIP <span class="hl-token">[TAX_ID_1]</span>, adres <span class="hl-token">[POSTAL_ADDRESS_1]</span>, konto <span class="hl-token">[BANK_ACCOUNT_1]</span>, kwota <span class="hl-token">[FINANCIAL_AMOUNT_1]</span></code>
+                </div>
+              </div>
+            </div>
+            <div class="flow-col flow-col-ext">
+              <div class="flow-transfer">→</div>
+            </div>
+          </div>
+
+          <div class="flow-cols">
+            <div class="flow-col">
+              <div class="flow-transfer flow-transfer-in">←</div>
+            </div>
+            <div class="flow-col flow-col-ext">
+              <div class="flow-step">
+                <div class="step-marker">3</div>
+                <div class="step-content">
+                  <div class="step-title">LLM response</div>
+                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl-token">[PERSON_NAME_1]</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl-token">[TAX_ID_1]</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl-token">[POSTAL_ADDRESS_1]</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl-token">[BANK_ACCOUNT_1]</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl-token">[FINANCIAL_AMOUNT_1]</span>"<br/>{"}"}</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-cols">
+            <div class="flow-col">
+              <div class="flow-arrow">↓ <span>De-anonymize</span></div>
+
+              <div class="flow-step">
+                <div class="step-marker">4</div>
+                <div class="step-content">
+                  <div class="step-title">Final result</div>
+                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl">Jan Kowalski</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl">527-020-1234</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl">ul. Marszałkowska 10/5, ...</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl">PL61 1090 ... 2874</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl">12 500 PLN</span>"<br/>{"}"}</code>
+                </div>
+              </div>
+            </div>
+            <div class="flow-col flow-col-ext"></div>
+          </div>
+        </div>
+
+        <div class="usecase-mapping">
+          <div class="mapping-label">Entity mapping (stored locally, never sent)</div>
+          <div class="mapping-table">
+            <code class="hl-token">[PERSON_NAME_1]</code><span class="mapping-sep">↔</span><code>Jan Kowalski</code>
+            <code class="hl-token">[TAX_ID_1]</code><span class="mapping-sep">↔</span><code>527-020-1234</code>
+            <code class="hl-token">[POSTAL_ADDRESS_1]</code><span class="mapping-sep">↔</span><code>ul. Marszałkowska 10/5, ...</code>
+            <code class="hl-token">[BANK_ACCOUNT_1]</code><span class="mapping-sep">↔</span><code>PL61 1090 ... 2874</code>
+            <code class="hl-token">[FINANCIAL_AMOUNT_1]</code><span class="mapping-sep">↔</span><code>12 500 PLN</code>
+          </div>
+        </div>
+      </section>
+
+      <!-- Use Case 2: Training Data -->
+      <section class="usecase-section">
+        <h2>GDPR-safe model training data</h2>
+        <p class="usecase-desc">Prepare datasets that comply with EU AI Act Art.&nbsp;10(5). Real PII is replaced with synthetic data — the text structure stays intact for learning, but contains zero real personal information.</p>
+
+        <div class="usecase-flow">
+          <div class="flow-step">
+            <div class="step-marker">1</div>
+            <div class="step-content">
+              <div class="step-title">Original training record</div>
+              <code class="step-code">Pacjent <span class="hl">Emil Nowak</span> (PESEL: <span class="hl">91082734567</span>), zam. <span class="hl">ul. Lipowa 22, 30-702 Kraków</span>, zgłosił się z <span class="hl-special">bólem w klatce piersiowej</span>. Lekarz prowadzący: <span class="hl">dr Anna Wiśniewska</span>.</code>
+            </div>
+          </div>
+
+          <div class="flow-arrow">↓ <span>Detect &amp; replace with synthetic data</span></div>
+
+          <div class="flow-step">
+            <div class="step-marker">2</div>
+            <div class="step-content">
+              <div class="step-title">Anonymized training record</div>
+              <code class="step-code">Pacjent <span class="hl-synth">Tomasz Zieliński</span> (PESEL: <span class="hl-synth">85120498321</span>), zam. <span class="hl-synth">ul. Dębowa 7, 50-307 Wrocław</span>, zgłosił się z <span class="hl-synth">bólem głowy</span>. Lekarz prowadzący: <span class="hl-synth">dr Katarzyna Lewandowska</span>.</code>
+            </div>
+          </div>
+
+          <div class="flow-arrow">↓ <span>Safe for training</span></div>
+
+          <div class="flow-step flow-step-result">
+            <div class="step-marker">3</div>
+            <div class="step-content">
+              <div class="step-title">Model training</div>
+              <code class="step-code">Text structure preserved. No real person identifiable. Compliant with GDPR Art.&nbsp;89 and EU&nbsp;AI&nbsp;Act Art.&nbsp;10(5).</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="usecase-mapping">
+          <div class="mapping-label">Each record gets unique synthetic replacements</div>
+          <div class="mapping-table">
+            <code><span class="hl">Emil Nowak</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">Tomasz Zieliński</span></code>
+            <code><span class="hl">91082734567</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">85120498321</span></code>
+            <code><span class="hl">ul. Lipowa 22, ...</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">ul. Dębowa 7, ...</span></code>
+            <code><span class="hl-special">ból w klatce piersiowej</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">ból głowy</span></code>
+            <code><span class="hl">dr Anna Wiśniewska</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">dr K. Lewandowska</span></code>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Links -->
+      <section class="links-section">
+        <a href="/docs" class="link-card card">
+          <strong>Documentation</strong>
+          <span>Entity reference, model card, integration guide</span>
+        </a>
+        <a href="/docs/model-card" class="link-card card">
+          <strong>Model card</strong>
+          <span>Architecture, ~95% F1, limitations</span>
+        </a>
+        <a href="https://huggingface.co/bardsai/eu-pii-anonimization" target="_blank" rel="noopener" class="link-card card">
+          <strong>HuggingFace</strong>
+          <span>Download model, weights, tokenizer</span>
+        </a>
+      </section>
+
+      <!-- Legend -->
+      <section class="legend">
+        <div class="legend-grid">
+          <span class="legend-item"><span class="dot dot-standard"></span> Standard PII &mdash; Art. 4(1)</span>
+          <span class="legend-item"><span class="dot dot-special"></span> Special category &mdash; Art. 9(1)</span>
+        </div>
+      </section>
+    </main>
+    <Footer />
+
+    <script>
+      const SAMPLES: Record<string, string> = {
+        "1": `Pracownik Anna Wiśniewska, zatrudniona w dziale IT, otrzymuje wynagrodzenie w wysokości 12 500 PLN brutto. Numer paszportu: EP1234567. NIP firmy: 527-020-1234. Adres zamieszkania: ul. Piękna 22, 00-549 Warszawa. Wyznanie: katolicyzm. Przynależność związkowa: NSZZ.`,
+        "2": `Nazywam się Jan Kowalski, urodzony 15 marca 1985 roku w Warszawie. Mój numer PESEL to 85031512345, a numer dowodu osobistego ABC123456. Mieszkam przy ul. Marszałkowskiej 10/5, 00-001 Warszawa. Mój adres e-mail to jan.kowalski@example.com, a numer telefonu +48 600 123 456.`,
+        "3": `Pacjent Adam Nowak (PESEL: 90010112345) zgłosił się do kliniki z rozpoznaniem cukrzycy typu 2. Numer ubezpieczenia zdrowotnego: NFZ-WA-123456789. Rachunek bankowy do zwrotu kosztów: PL61 1090 1014 0000 0712 1981 2874. Adres IP urządzenia pacjenta: 192.168.1.105.`,
+      };
+
+      const REGULATION_MAP: Record<string, string> = {
+        "cat-identity": "Art. 4(1)",
+        "cat-contact": "Art. 4(1)",
+        "cat-technical": "Recital 30",
+        "cat-financial": "Art. 4(1)",
+        "cat-government": "Art. 87",
+        "cat-health": "Art. 9(1)",
+        "cat-special": "Art. 9(1)",
+        "cat-employment": "Art. 88",
+      };
+
+      const CATEGORY_MAP: Record<string, string> = {
+        PERSON_NAME: "cat-identity",
+        DATE_OF_BIRTH: "cat-identity",
+        PERSON_ATTRIBUTE: "cat-identity",
+        PERSON_ALIAS: "cat-identity",
+        EMAIL_ADDRESS: "cat-contact",
+        PHONE_NUMBER: "cat-contact",
+        CONTACT_HANDLE: "cat-contact",
+        POSTAL_ADDRESS: "cat-contact",
+        LOCATION: "cat-contact",
+        GEO_LOCATION: "cat-contact",
+        IP_ADDRESS: "cat-technical",
+        DEVICE_IDENTIFIER: "cat-technical",
+        COOKIE_IDENTIFIER: "cat-technical",
+        ACCOUNT_IDENTIFIER: "cat-technical",
+        AUTH_SECRET: "cat-technical",
+        BANK_ACCOUNT: "cat-financial",
+        PAYMENT_CARD: "cat-financial",
+        PAYMENT_CARD_METADATA: "cat-financial",
+        FINANCIAL_TRANSACTION: "cat-financial",
+        FINANCIAL_AMOUNT: "cat-financial",
+        SALARY_COMPENSATION: "cat-financial",
+        NATIONAL_ID_NUMBER: "cat-government",
+        PASSPORT_NUMBER: "cat-government",
+        DRIVER_LICENSE_NUMBER: "cat-government",
+        TAX_ID_NUMBER: "cat-government",
+        HEALTH_INSURANCE_ID: "cat-government",
+        RESIDENCE_PERMIT_NUMBER: "cat-government",
+        HEALTH_DATA: "cat-health",
+        GENETIC_DATA: "cat-health",
+        BIOMETRIC_DATA: "cat-health",
+        RELIGION_OR_BELIEF: "cat-special",
+        POLITICAL_OPINION: "cat-special",
+        SEXUAL_ORIENTATION: "cat-special",
+        TRADE_UNION_MEMBERSHIP: "cat-special",
+        ETHNIC_ORIGIN: "cat-special",
+        CRIMINAL_OFFENCE_DATA: "cat-special",
+        EMPLOYMENT_CONTEXT: "cat-employment",
+      };
+
+      const loadBtn = document.getElementById("load-btn") as HTMLButtonElement;
+      const analyzeBtn = document.getElementById("analyze-btn") as HTMLButtonElement;
+      const inputText = document.getElementById("input-text") as HTMLTextAreaElement;
+      const outputAnonymized = document.getElementById("output-anonymized") as HTMLDivElement;
+      const outputHighlighted = document.getElementById("output-highlighted") as HTMLDivElement;
+      const statusText = document.getElementById("status-text") as HTMLDivElement;
+      const progressContainer = document.getElementById("progress-container") as HTMLDivElement;
+      const progressBar = document.getElementById("progress-bar") as HTMLDivElement;
+      const entityList = document.getElementById("entity-list") as HTMLDivElement;
+      const entityTableContainer = document.getElementById("entity-table-container") as HTMLDivElement;
+      const viewToggle = document.getElementById("view-toggle") as HTMLDivElement;
+      const previewLabel = document.getElementById("preview-label") as HTMLSpanElement;
+
+      let modelLoaded = false;
+
+      // View toggle logic
+      document.querySelectorAll(".toggle-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".toggle-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const view = (btn as HTMLElement).dataset.view;
+          if (view === "anonymized") {
+            outputAnonymized.style.display = "block";
+            outputHighlighted.style.display = "none";
+          } else {
+            outputAnonymized.style.display = "none";
+            outputHighlighted.style.display = "block";
+          }
+        });
+      });
+
+      const worker = new Worker("/worker.js", { type: "module" });
+
+      worker.onmessage = (e) => {
+        const { type } = e.data;
+
+        if (type === "status") {
+          statusText.textContent = e.data.message;
+        } else if (type === "progress") {
+          const p = e.data.data;
+          if (p.status === "progress" && p.progress != null) {
+            progressContainer.style.display = "block";
+            const pct = Math.round(p.progress);
+            progressBar.style.width = `${pct}%`;
+            statusText.textContent = `Downloading ${p.file || "model"}: ${pct}%`;
+          } else if (p.status === "done") {
+            progressBar.style.width = "100%";
+          } else if (p.status === "ready") {
+            progressContainer.style.display = "none";
+          }
+        } else if (type === "loaded") {
+          modelLoaded = true;
+          statusText.textContent = "Model loaded and ready!";
+          statusText.classList.add("ready");
+          progressContainer.style.display = "none";
+          loadBtn.disabled = true;
+          loadBtn.textContent = "Model ready";
+          analyzeBtn.disabled = false;
+        } else if (type === "debug") {
+          console.log("DEBUG from worker:", JSON.stringify(e.data.data, null, 2));
+        } else if (type === "result") {
+          console.log("Received raw data sample:", JSON.stringify(e.data.data.slice(0, 3), null, 2));
+          const normalized = normalizeEntities(e.data.data, inputText.value);
+          const merged = mergeAdjacentEntities(normalized, inputText.value);
+          renderResults(merged);
+          analyzeBtn.disabled = false;
+          analyzeBtn.textContent = "Analyze";
+          statusText.textContent = "Model loaded and ready!";
+        } else if (type === "error") {
+          statusText.textContent = `Error: ${e.data.message}`;
+          statusText.classList.add("error");
+          analyzeBtn.disabled = false;
+          analyzeBtn.textContent = "Analyze";
+        }
+      };
+
+      loadBtn.addEventListener("click", () => {
+        loadBtn.disabled = true;
+        loadBtn.textContent = "Downloading...";
+        statusText.classList.remove("error");
+        worker.postMessage({ type: "load" });
+      });
+
+      analyzeBtn.addEventListener("click", () => {
+        const text = inputText.value.trim();
+        if (!text) return;
+        analyzeBtn.disabled = true;
+        analyzeBtn.textContent = "Analyzing...";
+        outputAnonymized.innerHTML = '<span class="placeholder-text">Processing...</span>';
+        outputHighlighted.innerHTML = "";
+        entityList.style.display = "none";
+        worker.postMessage({ type: "classify", text });
+      });
+
+      document.querySelectorAll(".sample-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const sample = (btn as HTMLElement).dataset.sample!;
+          inputText.value = SAMPLES[sample];
+        });
+      });
+
+      interface Entity {
+        entity_group: string;
+        word: string;
+        score: number;
+        start: number;
+        end: number;
+      }
+
+      function getCategoryClass(entityGroup: string): string {
+        return CATEGORY_MAP[entityGroup] || "cat-identity";
+      }
+
+      function normalizeEntities(raw: any[], text: string): Entity[] {
+        if (!raw || raw.length === 0) return [];
+
+        const entities: Entity[] = [];
+        let current: Entity | null = null;
+
+        for (const token of raw) {
+          const rawLabel = token.entity_group || token.entity || "";
+          const score = token.score || 0;
+          const start = token.start;
+          const end = token.end;
+
+          let tag = "O";
+          let entityType = "";
+          if (rawLabel.startsWith("B-")) {
+            tag = "B";
+            entityType = rawLabel.slice(2);
+          } else if (rawLabel.startsWith("I-")) {
+            tag = "I";
+            entityType = rawLabel.slice(2);
+          } else if (rawLabel !== "O" && rawLabel !== "LABEL_0" && rawLabel !== "") {
+            tag = "B";
+            entityType = rawLabel;
+          }
+
+          if (tag === "B") {
+            if (current) entities.push(current);
+            current = {
+              entity_group: entityType,
+              word: text.slice(start, end),
+              score,
+              start,
+              end,
+            };
+          } else if (tag === "I" && current && current.entity_group === entityType) {
+            current.end = end;
+            current.word = text.slice(current.start, end);
+            current.score = Math.max(current.score, score);
+          } else {
+            if (current) {
+              entities.push(current);
+              current = null;
+            }
+          }
+        }
+        if (current) entities.push(current);
+
+        return entities;
+      }
+
+      function mergeAdjacentEntities(entities: Entity[], text: string): Entity[] {
+        if (entities.length <= 1) return entities;
+        const sorted = [...entities].sort((a, b) => a.start - b.start);
+        const merged: Entity[] = [sorted[0]];
+
+        for (let i = 1; i < sorted.length; i++) {
+          const prev = merged[merged.length - 1];
+          const curr = sorted[i];
+
+          const gap = text.slice(prev.end, curr.start);
+          if (prev.entity_group === curr.entity_group && gap.length <= 3 && /^[\s.,;:\-/]*$/.test(gap)) {
+            prev.end = curr.end;
+            prev.word = text.slice(prev.start, prev.end);
+            prev.score = Math.max(prev.score, curr.score);
+          } else {
+            merged.push(curr);
+          }
+        }
+
+        return merged;
+      }
+
+      function renderResults(entities: Entity[]) {
+        if (previewLabel) previewLabel.style.display = "none";
+        const text = inputText.value;
+
+        if (!entities || entities.length === 0) {
+          outputAnonymized.innerHTML = `<span class="no-entities">No PII entities detected.</span><br><br>${escapeHtml(text)}`;
+          outputHighlighted.innerHTML = escapeHtml(text);
+          entityList.style.display = "none";
+          viewToggle.style.display = "none";
+          return;
+        }
+
+        const valid = entities.filter(
+          (e) => typeof e.start === "number" && typeof e.end === "number" && e.entity_group
+        );
+
+        if (valid.length === 0) {
+          outputAnonymized.innerHTML = `<span class="no-entities">No valid PII entities detected.</span><br><br>${escapeHtml(text)}`;
+          outputHighlighted.innerHTML = escapeHtml(text);
+          entityList.style.display = "none";
+          viewToggle.style.display = "none";
+          return;
+        }
+
+        const sorted = [...valid].sort((a, b) => a.start - b.start);
+
+        let anonHtml = "";
+        let highlightHtml = "";
+        let lastEnd = 0;
+
+        for (const entity of sorted) {
+          if (entity.start < lastEnd) continue;
+
+          const cat = getCategoryClass(entity.entity_group);
+          const score = Math.round(entity.score * 100);
+          const beforeText = escapeHtml(text.slice(lastEnd, entity.start));
+
+          anonHtml += beforeText;
+          anonHtml += `<span class="anon-tag ${cat}" title="Was: ${escapeHtml(text.slice(entity.start, entity.end))} (${score}%)">[${entity.entity_group}]</span>`;
+
+          highlightHtml += beforeText;
+          highlightHtml += `<mark class="entity ${cat}" title="${entity.entity_group} (${score}%)">${escapeHtml(text.slice(entity.start, entity.end))}<span class="entity-label">${entity.entity_group}</span></mark>`;
+
+          lastEnd = entity.end;
+        }
+
+        const trailingText = escapeHtml(text.slice(lastEnd));
+        anonHtml += trailingText;
+        highlightHtml += trailingText;
+
+        outputAnonymized.innerHTML = anonHtml;
+        outputHighlighted.innerHTML = highlightHtml;
+        viewToggle.style.display = "flex";
+
+        entityList.style.display = "block";
+        let tableHtml = `<table class="results-table"><thead><tr><th>Entity</th><th>Type</th><th>Regulation</th><th class="col-confidence">Confidence</th></tr></thead><tbody>`;
+        for (const entity of sorted) {
+          if (entity.start < 0) continue;
+          const cat = getCategoryClass(entity.entity_group);
+          const score = Math.round(entity.score * 100);
+          const originalText = text.slice(entity.start, entity.end);
+          const reg = REGULATION_MAP[cat] || "Art. 4(1)";
+          const isSpecial = cat === "cat-health" || cat === "cat-special";
+          const regLabel = isSpecial
+            ? `<span class="reg-ref reg-special">${reg}</span>`
+            : `<span class="reg-ref">${reg}</span>`;
+          tableHtml += `<tr><td><span class="entity-badge ${cat}">${escapeHtml(originalText)}</span></td><td><code>${entity.entity_group}</code></td><td>${regLabel}</td><td class="col-confidence">${score}%</td></tr>`;
+        }
+        tableHtml += `</tbody></table>`;
+        entityTableContainer.innerHTML = tableHtml;
+      }
+
+      function escapeHtml(str: string): string {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+    </script>
+  </body>
 </html>
+
+<style>
+  /* Hero */
+  .hero {
+    padding: var(--space-md) 0 var(--space-xl);
+    max-width: 680px;
+  }
+  .hero-kicker {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.01em;
+  }
+  .hero h1 {
+    font-size: 2.25rem;
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+  }
+  .subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0 0 var(--space-lg) 0;
+  }
+  .language-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+  }
+  .lang-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-right: 0.15rem;
+  }
+  .lang-item {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .lang-active {
+    color: var(--color-text);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    font-weight: 600;
+  }
+  .lang-disabled {
+    color: var(--color-text-secondary);
+    opacity: 0.4;
+    filter: grayscale(1);
+    position: relative;
+    cursor: default;
+  }
+  .lang-disabled:hover {
+    opacity: 0.6;
+  }
+  .lang-disabled::after {
+    content: "Coming soon";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-text);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s;
+  }
+  .lang-disabled:hover::after {
+    opacity: 1;
+  }
+  /* Demo */
+  .demo-section {
+    margin-bottom: var(--space-2xl);
+  }
+  .demo-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    background: var(--color-surface);
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xl);
+  }
+  .model-status { flex: 1; }
+  .status-text {
+    font-size: 0.825rem;
+    color: var(--color-text-secondary);
+  }
+  .status-text.ready {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .status-text.error {
+    color: var(--color-text);
+  }
+  .progress-bar-container {
+    margin-top: var(--space-sm);
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: var(--space-xl);
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-header label {
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .sample-buttons {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  textarea {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+    background: var(--color-surface);
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-text-secondary);
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .output-header h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .preview-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .toggle-btn {
+    border: none;
+    background: var(--color-surface);
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .toggle-btn.active {
+    background: var(--color-text);
+    color: white;
+  }
+  .toggle-btn:not(.active):hover {
+    background: var(--color-surface-alt);
+  }
+  .output-text {
+    padding: 0.85rem;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    line-height: 2;
+    min-height: 64px;
+  }
+  .placeholder-text {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  .no-entities {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .entity-list { margin-top: var(--space-xl); }
+  .entity-list h4 {
+    font-size: 0.8rem;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+  }
+  :global(.results-table) {
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  :global(.results-table thead) {
+    background: var(--color-surface-alt);
+  }
+  :global(.results-table th) {
+    text-align: left;
+    padding: 0.55rem 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--color-border);
+  }
+  :global(.results-table td) {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+  }
+  :global(.results-table tbody tr:last-child td) {
+    border-bottom: none;
+  }
+  :global(.results-table tbody tr:hover) {
+    background: var(--color-surface-alt);
+  }
+  :global(.results-table .col-confidence) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+  :global(.results-table code) {
+    font-size: 0.72rem;
+    padding: 1px 4px;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    color: var(--color-text-secondary);
+  }
+  :global(.reg-ref) {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+  }
+  :global(.reg-ref.reg-special) {
+    color: var(--color-text-secondary);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.68rem;
+  }
+  .entity-badge {
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  /* Entity categories */
+  .categories-section { margin-bottom: var(--space-2xl); }
+  .categories-section h2 { margin-bottom: var(--space-sm); }
+  .section-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-xl);
+    max-width: 680px;
+  }
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+  }
+  .section-link {
+    margin-top: var(--space-md);
+    font-size: 0.85rem;
+  }
+
+  /* Regulatory context */
+  .regulation-section { margin-bottom: var(--space-2xl); }
+  .regulation-section h2 { margin-bottom: var(--space-sm); }
+  .reg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+  .reg-block h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .reg-id {
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    font-size: 0.825rem;
+  }
+  .reg-list {
+    margin: 0;
+    padding: 0;
+  }
+  .reg-item {
+    margin-bottom: var(--space-md);
+  }
+  .reg-item dt {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 2px;
+  }
+  .reg-item dd {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* How it works */
+  /* Use Cases */
+  .usecase-section {
+    margin-bottom: var(--space-2xl);
+  }
+  .usecase-section h2 {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-xs);
+  }
+  .usecase-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-lg);
+    max-width: 640px;
+  }
+
+  /* Flow layout */
+  .usecase-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+  .flow-col {
+    min-height: 0;
+  }
+  .flow-col-ext {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flow-col-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    padding: var(--space-xs) 0;
+    border-bottom: 2px solid var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+  .flow-col-label-ext {
+    border-bottom-color: var(--color-border);
+    color: var(--color-text-secondary);
+  }
+
+  /* Steps */
+  .flow-step {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+  }
+  .flow-step-result {
+    border-top: 1px dashed var(--color-border);
+    padding-top: var(--space-md);
+  }
+  .step-marker {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-top: 1px;
+  }
+  .step-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .step-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+  .step-code {
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text);
+    white-space: normal;
+    word-break: break-word;
+    font-weight: 400;
+  }
+  .step-code-mono {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Highlights — minimal, underline-only */
+  .hl {
+    border-bottom: 1.5px solid var(--color-text);
+    padding: 0 1px;
+  }
+  .hl-token {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+  .hl-special {
+    border-bottom: 1.5px dashed var(--color-text-secondary);
+    padding: 0 1px;
+  }
+  .hl-synth {
+    border-bottom: 1.5px solid var(--color-border);
+    padding: 0 1px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Arrows */
+  .flow-arrow {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    padding: 2px 0 2px 28px;
+    line-height: 1;
+  }
+  .flow-arrow span {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-left: 4px;
+  }
+
+  .flow-transfer {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-sm) 0;
+  }
+  .flow-transfer-in {
+    justify-content: flex-end;
+    padding-right: var(--space-sm);
+  }
+
+  /* Mapping */
+  .usecase-mapping {
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-alt);
+  }
+  .mapping-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xs);
+  }
+  .mapping-table {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 2px var(--space-sm);
+    align-items: center;
+  }
+  .mapping-table code {
+    font-size: 0.7rem;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text-secondary);
+  }
+  .mapping-sep {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+
+  /* Quick Links */
+  .links-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-2xl);
+  }
+  .link-card {
+    text-decoration: none;
+    color: var(--color-text);
+    padding: var(--space-md) var(--space-lg);
+  }
+  .link-card:hover { text-decoration: none; }
+  .link-card strong {
+    font-size: 0.875rem;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .link-card span {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Legend */
+  .legend {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+  .legend-grid {
+    display: flex;
+    gap: var(--space-lg);
+    font-size: 0.75rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-text-secondary);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .dot-standard {
+    background: rgba(37, 99, 163, 0.15);
+    border: 1px solid rgba(37, 99, 163, 0.35);
+  }
+  .dot-special {
+    background: rgba(180, 83, 9, 0.15);
+    border: 1px solid rgba(180, 83, 9, 0.35);
+  }
+
+  /* Entity highlights — standard PII (blue) and Art. 9(1) special category (amber) */
+  .cat-identity,
+  .cat-contact,
+  .cat-technical,
+  .cat-financial,
+  .cat-government,
+  .cat-employment {
+    background: rgba(37, 99, 163, 0.08);
+    border-bottom: 2px solid rgba(37, 99, 163, 0.35);
+  }
+  .cat-health,
+  .cat-special {
+    background: rgba(180, 83, 9, 0.08);
+    border-bottom: 2px solid rgba(180, 83, 9, 0.35);
+  }
+
+  :global(.anon-tag) {
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    font-family: monospace;
+    cursor: help;
+    background: rgba(37, 99, 163, 0.1);
+    color: #1e5a96;
+  }
+  :global(.anon-tag.cat-health),
+  :global(.anon-tag.cat-special) {
+    background: rgba(180, 83, 9, 0.1);
+    color: #92400e;
+  }
+
+  :global(mark.entity) {
+    padding: 0.1rem 0.2rem;
+    border-radius: 3px;
+    position: relative;
+    cursor: help;
+    color: inherit;
+  }
+  :global(.entity-label) {
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    vertical-align: super;
+    margin-left: 2px;
+    color: #1e5a96;
+    opacity: 0.7;
+  }
+  :global(.cat-health .entity-label),
+  :global(.cat-special .entity-label) {
+    color: #92400e;
+  }
+
+  :global(.entity-badge) {
+    background: rgba(37, 99, 163, 0.08);
+    color: #1e5a96;
+  }
+  :global(.entity-badge.cat-health),
+  :global(.entity-badge.cat-special) {
+    background: rgba(180, 83, 9, 0.08);
+    color: #92400e;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.75rem; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .reg-grid { grid-template-columns: 1fr; }
+    .links-section { grid-template-columns: 1fr; }
+    .flow-cols { grid-template-columns: 1fr; }
+    .flow-col-ext { display: none; }
+    .mapping-table { grid-template-columns: 1fr; gap: var(--space-xs); }
+    .mapping-sep { text-align: left; }
+  }
+</style>
