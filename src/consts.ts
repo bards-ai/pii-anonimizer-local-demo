@@ -12,7 +12,7 @@ export const DOCS_META = [
   {
     slug: "entity-categories",
     title: "Entity Categories",
-    description: "Full reference of 37 entity classes across 8 categories",
+    description: "Full reference of 35 entity classes across 8 categories",
     icon: "tag",
   },
   {

@@ -6,14 +6,14 @@ import EntityCategoryCard from "../components/EntityCategoryCard.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 const CATEGORIES = [
-  { name: "Personal Identity", article: "GDPR Art. 4(1)", entities: ["PERSON_NAME", "DATE_OF_BIRTH", "PERSON_ATTRIBUTE", "PERSON_ALIAS"] },
+  { name: "Personal Identity", article: "GDPR Art. 4(1)", entities: ["PERSON_NAME", "DATE_OF_BIRTH", "PERSON_ATTRIBUTE", "PERSON_ALIAS", "PERSON_IDENTIFIER"] },
+  { name: "Organizations", article: "GDPR Art. 4(1)", entities: ["ORGANIZATION_NAME", "ORGANIZATION_IDENTIFIER"] },
   { name: "Contact & Location", article: "GDPR Art. 4(1)", entities: ["EMAIL_ADDRESS", "PHONE_NUMBER", "CONTACT_HANDLE", "POSTAL_ADDRESS", "LOCATION", "GEO_LOCATION"] },
   { name: "Technical Identifiers", article: "GDPR Recital 30", entities: ["IP_ADDRESS", "DEVICE_IDENTIFIER", "COOKIE_IDENTIFIER", "ACCOUNT_IDENTIFIER", "AUTH_SECRET"] },
-  { name: "Financial", article: "GDPR Art. 4(1)", entities: ["BANK_ACCOUNT", "PAYMENT_CARD", "PAYMENT_CARD_METADATA", "FINANCIAL_TRANSACTION", "FINANCIAL_AMOUNT", "SALARY_COMPENSATION"] },
-  { name: "Government IDs", article: "GDPR Art. 87", entities: ["NATIONAL_ID_NUMBER", "PASSPORT_NUMBER", "DRIVER_LICENSE_NUMBER", "TAX_ID_NUMBER", "HEALTH_INSURANCE_ID", "RESIDENCE_PERMIT_NUMBER"] },
+  { name: "Financial", article: "GDPR Art. 4(1)", entities: ["BANK_ACCOUNT_IDENTIFIER", "PAYMENT_CARD", "PAYMENT_CARD_SECURITY", "DOCUMENT_REFERENCE", "FINANCIAL_AMOUNT", "INCOME_COMPENSATION", "VEHICLE_IDENTIFIER"] },
   { name: "Health & Biometric", article: "GDPR Art. 9(1)", entities: ["HEALTH_DATA", "GENETIC_DATA", "BIOMETRIC_DATA"] },
   { name: "Special Categories", article: "GDPR Art. 9(1)", entities: ["RELIGION_OR_BELIEF", "POLITICAL_OPINION", "SEXUAL_ORIENTATION", "TRADE_UNION_MEMBERSHIP", "ETHNIC_ORIGIN", "CRIMINAL_OFFENCE_DATA"] },
-  { name: "Employment", article: "GDPR Art. 88", entities: ["EMPLOYMENT_CONTEXT"] },
+  { name: "Employment", article: "GDPR Art. 88", entities: ["PERSON_ROLE_OR_TITLE"] },
 ];
 ---
 
@@ -27,7 +27,7 @@ const CATEGORIES = [
     <main>
       <!-- Hero -->
       <section class="hero">
-        <p class="hero-kicker">Open-source &middot; Apache 2.0 &middot; 37 entity types &middot; runs locally</p>
+        <p class="hero-kicker">Open-source &middot; Apache 2.0 &middot; 35 entity types &middot; runs locally</p>
         <h1>Make your AI data processing EU&#8209;compliant</h1>
         <p class="subtitle">
           Detect and anonymize personal data before it enters your AI pipeline.
@@ -113,7 +113,7 @@ const CATEGORIES = [
       <section class="categories-section">
         <h2>Entity taxonomy</h2>
         <p class="section-desc">
-          37 entity types across 8 categories, mapped to specific GDPR articles.
+          35 entity types across 8 categories, mapped to specific GDPR articles.
           Art.&nbsp;9(1) special categories (health, biometric, genetic, political, religious, ethnic, sexual orientation, trade union)
           are flagged separately to support higher-risk processing rules.
         </p>
@@ -140,7 +140,7 @@ const CATEGORIES = [
             <dl class="reg-list">
               <div class="reg-item">
                 <dt>Art. 4(1) &mdash; Personal data</dt>
-                <dd>Defines the scope: any information relating to an identified or identifiable natural person. The 37 entity types in this model map directly to the identifiers listed here.</dd>
+                <dd>Defines the scope: any information relating to an identified or identifiable natural person. The 35 entity types in this model map directly to the identifiers listed here.</dd>
               </div>
               <div class="reg-item">
                 <dt>Art. 5(1)(c) &mdash; Data minimisation</dt>
@@ -216,7 +216,7 @@ const CATEGORIES = [
                 <div class="step-marker">2</div>
                 <div class="step-content">
                   <div class="step-title">Anonymized prompt</div>
-                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl-token">[PERSON_NAME_1]</span>, NIP <span class="hl-token">[TAX_ID_1]</span>, adres <span class="hl-token">[POSTAL_ADDRESS_1]</span>, konto <span class="hl-token">[BANK_ACCOUNT_1]</span>, kwota <span class="hl-token">[FINANCIAL_AMOUNT_1]</span></code>
+                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl-token">[PERSON_NAME_1]</span>, NIP <span class="hl-token">[ORGANIZATION_IDENTIFIER_1]</span>, adres <span class="hl-token">[POSTAL_ADDRESS_1]</span>, konto <span class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</span>, kwota <span class="hl-token">[FINANCIAL_AMOUNT_1]</span></code>
                 </div>
               </div>
             </div>
@@ -224,6 +224,9 @@ const CATEGORIES = [
               <div class="flow-transfer">→</div>
             </div>
           </div>
+
+          <!-- Mobile: send to LLM arrow -->
+          <div class="flow-arrow mobile-only">→ <span>Send to third-party LLM</span></div>
 
           <div class="flow-cols">
             <div class="flow-col">
@@ -233,12 +236,15 @@ const CATEGORIES = [
               <div class="flow-step">
                 <div class="step-marker">3</div>
                 <div class="step-content">
-                  <div class="step-title">LLM response</div>
-                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl-token">[PERSON_NAME_1]</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl-token">[TAX_ID_1]</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl-token">[POSTAL_ADDRESS_1]</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl-token">[BANK_ACCOUNT_1]</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl-token">[FINANCIAL_AMOUNT_1]</span>"<br/>{"}"}</code>
+                  <div class="step-title">LLM response <span class="ext-badge">external</span></div>
+                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl-token">[PERSON_NAME_1]</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl-token">[ORGANIZATION_IDENTIFIER_1]</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl-token">[POSTAL_ADDRESS_1]</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl-token">[FINANCIAL_AMOUNT_1]</span>"<br/>{"}"}</code>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Mobile: return arrow -->
+          <div class="flow-arrow mobile-only">← <span>Response returns to your infrastructure</span></div>
 
           <div class="flow-cols">
             <div class="flow-col">
@@ -260,9 +266,9 @@ const CATEGORIES = [
           <div class="mapping-label">Entity mapping (stored locally, never sent)</div>
           <div class="mapping-table">
             <code class="hl-token">[PERSON_NAME_1]</code><span class="mapping-sep">↔</span><code>Jan Kowalski</code>
-            <code class="hl-token">[TAX_ID_1]</code><span class="mapping-sep">↔</span><code>527-020-1234</code>
+            <code class="hl-token">[ORGANIZATION_IDENTIFIER_1]</code><span class="mapping-sep">↔</span><code>527-020-1234</code>
             <code class="hl-token">[POSTAL_ADDRESS_1]</code><span class="mapping-sep">↔</span><code>ul. Marszałkowska 10/5, ...</code>
-            <code class="hl-token">[BANK_ACCOUNT_1]</code><span class="mapping-sep">↔</span><code>PL61 1090 ... 2874</code>
+            <code class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</code><span class="mapping-sep">↔</span><code>PL61 1090 ... 2874</code>
             <code class="hl-token">[FINANCIAL_AMOUNT_1]</code><span class="mapping-sep">↔</span><code>12 500 PLN</code>
           </div>
         </div>
@@ -353,7 +359,6 @@ const CATEGORIES = [
         "cat-contact": "Art. 4(1)",
         "cat-technical": "Recital 30",
         "cat-financial": "Art. 4(1)",
-        "cat-government": "Art. 87",
         "cat-health": "Art. 9(1)",
         "cat-special": "Art. 9(1)",
         "cat-employment": "Art. 88",
@@ -364,6 +369,10 @@ const CATEGORIES = [
         DATE_OF_BIRTH: "cat-identity",
         PERSON_ATTRIBUTE: "cat-identity",
         PERSON_ALIAS: "cat-identity",
+        PERSON_IDENTIFIER: "cat-identity",
+        PERSON_ROLE_OR_TITLE: "cat-employment",
+        ORGANIZATION_NAME: "cat-identity",
+        ORGANIZATION_IDENTIFIER: "cat-identity",
         EMAIL_ADDRESS: "cat-contact",
         PHONE_NUMBER: "cat-contact",
         CONTACT_HANDLE: "cat-contact",
@@ -375,18 +384,13 @@ const CATEGORIES = [
         COOKIE_IDENTIFIER: "cat-technical",
         ACCOUNT_IDENTIFIER: "cat-technical",
         AUTH_SECRET: "cat-technical",
-        BANK_ACCOUNT: "cat-financial",
+        BANK_ACCOUNT_IDENTIFIER: "cat-financial",
         PAYMENT_CARD: "cat-financial",
-        PAYMENT_CARD_METADATA: "cat-financial",
-        FINANCIAL_TRANSACTION: "cat-financial",
+        PAYMENT_CARD_SECURITY: "cat-financial",
+        DOCUMENT_REFERENCE: "cat-financial",
         FINANCIAL_AMOUNT: "cat-financial",
-        SALARY_COMPENSATION: "cat-financial",
-        NATIONAL_ID_NUMBER: "cat-government",
-        PASSPORT_NUMBER: "cat-government",
-        DRIVER_LICENSE_NUMBER: "cat-government",
-        TAX_ID_NUMBER: "cat-government",
-        HEALTH_INSURANCE_ID: "cat-government",
-        RESIDENCE_PERMIT_NUMBER: "cat-government",
+        INCOME_COMPENSATION: "cat-financial",
+        VEHICLE_IDENTIFIER: "cat-financial",
         HEALTH_DATA: "cat-health",
         GENETIC_DATA: "cat-health",
         BIOMETRIC_DATA: "cat-health",
@@ -396,7 +400,6 @@ const CATEGORIES = [
         TRADE_UNION_MEMBERSHIP: "cat-special",
         ETHNIC_ORIGIN: "cat-special",
         CRIMINAL_OFFENCE_DATA: "cat-special",
-        EMPLOYMENT_CONTEXT: "cat-employment",
       };
 
       const loadBtn = document.getElementById("load-btn") as HTMLButtonElement;
@@ -1140,6 +1143,20 @@ const CATEGORIES = [
     font-weight: 600;
     font-size: 0.9em;
   }
+  .mobile-only { display: none; }
+  .ext-badge {
+    font-size: 0.55rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
   .hl-special {
     border-bottom: 1.5px dashed var(--color-text-secondary);
     padding: 0 1px;
@@ -1273,7 +1290,6 @@ const CATEGORIES = [
   .cat-contact,
   .cat-technical,
   .cat-financial,
-  .cat-government,
   .cat-employment {
     background: rgba(37, 99, 163, 0.08);
     border-bottom: 2px solid rgba(37, 99, 163, 0.35);
@@ -1334,11 +1350,33 @@ const CATEGORIES = [
   @media (max-width: 768px) {
     .hero h1 { font-size: 1.75rem; }
     .controls { flex-direction: column; align-items: stretch; }
-    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Entity taxonomy: single column */
+    .categories-grid { grid-template-columns: 1fr; }
+
     .reg-grid { grid-template-columns: 1fr; }
     .links-section { grid-template-columns: 1fr; }
+
+    /* Results table: horizontal scroll wrapper */
+    .entity-list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    :global(.results-table) { min-width: 500px; font-size: 0.72rem; }
+    :global(.results-table th),
+    :global(.results-table td) { padding: 0.4rem 0.5rem; }
+
+    /* Use cases: linearize flow on mobile */
     .flow-cols { grid-template-columns: 1fr; }
-    .flow-col-ext { display: none; }
+    .flow-col-ext { display: flex; }
+    .flow-col-label { font-size: 0.6rem; }
+    .flow-col-label-ext {
+      border-bottom-color: var(--color-border);
+      margin-top: var(--space-xs);
+    }
+    .flow-transfer { display: none; }
+    .mobile-only { display: block; }
+    .step-code { font-size: 0.68rem; }
+    .step-code-mono { font-size: 0.62rem; }
+
+    /* Mapping table: stack */
     .mapping-table { grid-template-columns: 1fr; gap: var(--space-xs); }
     .mapping-sep { text-align: left; }
   }
