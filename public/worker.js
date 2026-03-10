@@ -4,7 +4,9 @@ import {
   env,
 } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3";
 
-env.allowLocalModels = false;
+env.allowLocalModels = true;
+env.allowRemoteModels = false;
+env.localModelPath = "/models/";
 
 const MODEL_ID = "bardsai/eu-pii-anonimization";
 

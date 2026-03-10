@@ -203,3 +203,4 @@ dist
 
 onnx_model/
 onnx_model_quantized/
+public/models/
