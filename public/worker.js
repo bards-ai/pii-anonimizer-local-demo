@@ -36,7 +36,6 @@ self.onmessage = async (e) => {
 
       // Extract label mapping from model config
       id2label = model.config.id2label;
-      console.log("id2label:", JSON.stringify(id2label));
 
       // Find the O label ID
       for (const [id, label] of Object.entries(id2label)) {
@@ -45,7 +44,6 @@ self.onmessage = async (e) => {
           break;
         }
       }
-      console.log("O label ID:", oLabelId);
 
       self.postMessage({ type: "loaded" });
     } catch (err) {
@@ -57,16 +55,19 @@ self.onmessage = async (e) => {
       return;
     }
 
+    let inputs = null;
+    let output = null;
+
     try {
       self.postMessage({ type: "status", message: "Analyzing text..." });
 
-      const inputs = await tokenizer(e.data.text, {
+      inputs = await tokenizer(e.data.text, {
         return_tensors: "onnx",
         truncation: true,
         max_length: 512,
       });
 
-      const output = await model(inputs);
+      output = await model(inputs);
       const logitsData = output.logits.data; // Float32Array
       const dims = output.logits.dims;
       const numTokens = dims[1];
@@ -107,14 +108,9 @@ self.onmessage = async (e) => {
           offsets.push([idx, idx + piece.length]);
           cursor = idx + piece.length;
         } else {
-          // Fallback: just advance cursor
-          console.warn(`Could not align token ${i} "${decoded}" (piece="${piece}") at cursor ${cursor}`);
           offsets.push(null);
         }
       }
-
-      console.log("Offsets sample:", offsets.slice(0, 10));
-      console.log("Text sample at offsets:", offsets.slice(1, 6).map(o => o ? e.data.text.slice(o[0], o[1]) : "NULL"));
 
       function mySoftmax(arr) {
         const max = Math.max(...arr);
@@ -126,26 +122,21 @@ self.onmessage = async (e) => {
       const results = [];
 
       for (let i = 0; i < numTokens; i++) {
-        // Skip special tokens
         const offset = offsets[i];
         if (!offset) continue;
 
-        // Extract logits for this token
         const start = i * numLabels;
         const tokenLogits = [];
         for (let j = 0; j < numLabels; j++) {
           tokenLogits.push(logitsData[start + j]);
         }
 
-        // Apply O bias
         if (oLabelId !== null) {
           tokenLogits[oLabelId] += O_BIAS;
         }
 
-        // Softmax
         const probs = mySoftmax(tokenLogits);
 
-        // Find best label
         let bestId = 0;
         let bestScore = probs[0];
         for (let j = 1; j < numLabels; j++) {
@@ -156,16 +147,6 @@ self.onmessage = async (e) => {
         }
 
         const label = id2label[bestId] || "O";
-
-        // Debug first few tokens
-        if (i < 8) {
-          const topLabels = probs
-            .map((p, idx) => ({ p, label: id2label[idx] }))
-            .sort((a, b) => b.p - a.p)
-            .slice(0, 3);
-          console.log(`Token ${i} "${e.data.text.slice(offset[0], offset[1])}" -> ${label} (${bestScore.toFixed(4)})`, topLabels);
-        }
-
         if (label === "O") continue;
 
         results.push({
@@ -178,10 +159,16 @@ self.onmessage = async (e) => {
         });
       }
 
-      console.log("Results with O_BIAS:", results.length, "entities from", numTokens, "tokens");
       self.postMessage({ type: "result", data: results });
     } catch (err) {
       self.postMessage({ type: "error", message: err.message });
+    } finally {
+      // Dispose tensors to free WASM memory
+      try {
+        if (output?.logits?.dispose) output.logits.dispose();
+        if (inputs?.input_ids?.dispose) inputs.input_ids.dispose();
+        if (inputs?.attention_mask?.dispose) inputs.attention_mask.dispose();
+      } catch (_) {}
     }
   }
 };

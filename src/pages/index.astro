@@ -77,6 +77,9 @@ const CATEGORIES = [
             </div>
             <button id="load-btn" class="btn btn-secondary">Download bardsai/eu-pii-anonimization</button>
           </div>
+          <div class="mobile-warning" id="mobile-warning" style="display:none">
+            The model requires ~300 MB of memory. On mobile devices this may cause the browser tab to reload. For best results, use a desktop browser.
+          </div>
 
           <div class="input-section">
             <div class="section-header">
@@ -401,6 +404,13 @@ const CATEGORIES = [
         ETHNIC_ORIGIN: "cat-special",
         CRIMINAL_OFFENCE_DATA: "cat-special",
       };
+
+      // Show mobile warning
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+      if (isMobile) {
+        const mobileWarning = document.getElementById("mobile-warning");
+        if (mobileWarning) mobileWarning.style.display = "block";
+      }
 
       const loadBtn = document.getElementById("load-btn") as HTMLButtonElement;
       const analyzeBtn = document.getElementById("analyze-btn") as HTMLButtonElement;
@@ -765,6 +775,13 @@ const CATEGORIES = [
     background: var(--color-surface-alt);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-xl);
+  }
+  .mobile-warning {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    padding: var(--space-sm) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    line-height: 1.5;
   }
   .model-status { flex: 1; }
   .status-text {
