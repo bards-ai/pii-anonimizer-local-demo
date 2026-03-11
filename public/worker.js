@@ -3,10 +3,13 @@ import {
   AutoModelForTokenClassification,
   env,
 } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3";
+import { isAnyWhitespace, postprocessTokenResults } from "./worker-lib.js";
 
-env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = "/models/";
+// Route through our proxy (same origin, no CORS issues)
+// Using remote mode so Transformers.js caches via Cache API (persists across sessions)
+env.allowLocalModels = false;
+env.allowRemoteModels = true;
+env.remoteHost = self.location.origin + "/models/";
 
 const MODEL_ID = "bardsai/eu-pii-anonimization";
 
@@ -92,14 +95,14 @@ self.onmessage = async (e) => {
 
         if (piece === "") {
           // Just a space marker with no content — skip whitespace
-          while (cursor < e.data.text.length && e.data.text[cursor] === " ") cursor++;
+          while (cursor < e.data.text.length && isAnyWhitespace(e.data.text[cursor])) cursor++;
           offsets.push(null);
           continue;
         }
 
         // Skip whitespace in source text to align
         if (decoded.startsWith("▁")) {
-          while (cursor < e.data.text.length && e.data.text[cursor] === " ") cursor++;
+          while (cursor < e.data.text.length && isAnyWhitespace(e.data.text[cursor])) cursor++;
         }
 
         // Find the piece at current cursor position
@@ -121,13 +124,22 @@ self.onmessage = async (e) => {
 
       const results = [];
 
+      console.group(`%c[PII DEBUG] Token classification for: "${e.data.text.slice(0, 80)}..."`, "color: cyan; font-weight: bold");
+      console.log(`id2label mapping:`, id2label);
+      console.log(`O label ID: ${oLabelId}, O_BIAS: ${O_BIAS}`);
+      console.log(`Tokens: ${numTokens}, Labels: ${numLabels}`);
+
       for (let i = 0; i < numTokens; i++) {
         const offset = offsets[i];
         if (!offset) continue;
 
+        const tokenText = e.data.text.slice(offset[0], offset[1]);
+
         const start = i * numLabels;
+        const rawLogits = [];
         const tokenLogits = [];
         for (let j = 0; j < numLabels; j++) {
+          rawLogits.push(logitsData[start + j]);
           tokenLogits.push(logitsData[start + j]);
         }
 
@@ -136,6 +148,17 @@ self.onmessage = async (e) => {
         }
 
         const probs = mySoftmax(tokenLogits);
+
+        // Build per-class breakdown
+        const classBreakdown = {};
+        for (let j = 0; j < numLabels; j++) {
+          const lbl = id2label[j] || `UNK_${j}`;
+          classBreakdown[lbl] = {
+            rawLogit: rawLogits[j].toFixed(4),
+            biasedLogit: tokenLogits[j].toFixed(4),
+            prob: (probs[j] * 100).toFixed(2) + "%",
+          };
+        }
 
         let bestId = 0;
         let bestScore = probs[0];
@@ -147,6 +170,25 @@ self.onmessage = async (e) => {
         }
 
         const label = id2label[bestId] || "O";
+
+        // Sort by probability for top-5 display
+        const sorted = Object.entries(classBreakdown)
+          .sort((a, b) => parseFloat(b[1].prob) - parseFloat(a[1].prob))
+          .slice(0, 5);
+
+        const top5Str = sorted.map(([l, v]) => `${l}: ${v.prob} (logit: ${v.biasedLogit})`).join(" | ");
+
+        const style = label !== "O" ? "color: red; font-weight: bold" : "color: gray";
+        console.log(
+          `%c[Token ${i}] "${tokenText}" → ${label} (${(bestScore * 100).toFixed(2)}%)  TOP5: ${top5Str}`,
+          style
+        );
+
+        // Log full breakdown for non-O tokens
+        if (label !== "O") {
+          console.table(classBreakdown);
+        }
+
         if (label === "O") continue;
 
         results.push({
@@ -158,8 +200,11 @@ self.onmessage = async (e) => {
           end: offset[1],
         });
       }
+      console.groupEnd();
 
-      self.postMessage({ type: "result", data: results });
+      const merged = postprocessTokenResults(results, e.data.text);
+
+      self.postMessage({ type: "result", data: merged });
     } catch (err) {
       self.postMessage({ type: "error", message: err.message });
     } finally {

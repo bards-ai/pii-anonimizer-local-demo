@@ -426,6 +426,7 @@ const CATEGORIES = [
       const previewLabel = document.getElementById("preview-label") as HTMLSpanElement;
 
       let modelLoaded = false;
+      let worker: Worker | null = null;
 
       // View toggle logic
       document.querySelectorAll(".toggle-btn").forEach((btn) => {
@@ -443,52 +444,72 @@ const CATEGORIES = [
         });
       });
 
-      const worker = new Worker("/worker.js", { type: "module" });
+      function createWorker() {
+        const w = new Worker("/worker.js", { type: "module" });
 
-      worker.onmessage = (e) => {
-        const { type } = e.data;
+        w.onmessage = (e) => {
+          const { type } = e.data;
 
-        if (type === "status") {
-          statusText.textContent = e.data.message;
-        } else if (type === "progress") {
-          const p = e.data.data;
-          if (p.status === "progress" && p.progress != null) {
-            progressContainer.style.display = "block";
-            const pct = Math.round(p.progress);
-            progressBar.style.width = `${pct}%`;
-            statusText.textContent = `Downloading ${p.file || "model"}: ${pct}%`;
-          } else if (p.status === "done") {
-            progressBar.style.width = "100%";
-          } else if (p.status === "ready") {
+          if (type === "status") {
+            statusText.textContent = e.data.message;
+          } else if (type === "progress") {
+            const p = e.data.data;
+            if (p.status === "progress" && p.progress != null) {
+              progressContainer.style.display = "block";
+              const pct = Math.round(p.progress);
+              progressBar.style.width = `${pct}%`;
+              statusText.textContent = `Downloading ${p.file || "model"}: ${pct}%`;
+            } else if (p.status === "done") {
+              progressBar.style.width = "100%";
+            } else if (p.status === "ready") {
+              progressContainer.style.display = "none";
+            }
+          } else if (type === "loaded") {
+            modelLoaded = true;
+            statusText.textContent = "Model loaded and ready!";
+            statusText.classList.add("ready");
             progressContainer.style.display = "none";
+            loadBtn.disabled = true;
+            loadBtn.textContent = "Model ready";
+            analyzeBtn.disabled = false;
+          } else if (type === "result") {
+            const normalized = normalizeEntities(e.data.data, inputText.value);
+            const merged = mergeAdjacentEntities(normalized, inputText.value);
+            renderResults(merged);
+            analyzeBtn.disabled = false;
+            analyzeBtn.textContent = "Analyze";
+            statusText.textContent = "Model loaded and ready!";
+
+            // On mobile, terminate worker after inference to free ~300MB WASM memory.
+            // Model files are cached in Cache API so re-loading is fast (no re-download).
+            if (isMobile) {
+              w.terminate();
+              worker = null;
+              modelLoaded = false;
+              loadBtn.disabled = false;
+              loadBtn.textContent = "Load model for another analysis";
+              statusText.textContent = "Model unloaded to free memory.";
+              statusText.classList.remove("ready");
+              analyzeBtn.disabled = true;
+            }
+          } else if (type === "error") {
+            statusText.textContent = `Error: ${e.data.message}`;
+            statusText.classList.add("error");
+            analyzeBtn.disabled = false;
+            analyzeBtn.textContent = "Analyze";
           }
-        } else if (type === "loaded") {
-          modelLoaded = true;
-          statusText.textContent = "Model loaded and ready!";
-          statusText.classList.add("ready");
-          progressContainer.style.display = "none";
-          loadBtn.disabled = true;
-          loadBtn.textContent = "Model ready";
-          analyzeBtn.disabled = false;
-        } else if (type === "debug") {
-          console.log("DEBUG from worker:", JSON.stringify(e.data.data, null, 2));
-        } else if (type === "result") {
-          console.log("Received raw data sample:", JSON.stringify(e.data.data.slice(0, 3), null, 2));
-          const normalized = normalizeEntities(e.data.data, inputText.value);
-          const merged = mergeAdjacentEntities(normalized, inputText.value);
-          renderResults(merged);
-          analyzeBtn.disabled = false;
-          analyzeBtn.textContent = "Analyze";
-          statusText.textContent = "Model loaded and ready!";
-        } else if (type === "error") {
-          statusText.textContent = `Error: ${e.data.message}`;
-          statusText.classList.add("error");
-          analyzeBtn.disabled = false;
-          analyzeBtn.textContent = "Analyze";
-        }
-      };
+        };
+
+        return w;
+      }
+
+      worker = createWorker();
 
       loadBtn.addEventListener("click", () => {
+        // Re-create worker if it was terminated (mobile memory management)
+        if (!worker) {
+          worker = createWorker();
+        }
         loadBtn.disabled = true;
         loadBtn.textContent = "Downloading...";
         statusText.classList.remove("error");
@@ -497,7 +518,7 @@ const CATEGORIES = [
 
       analyzeBtn.addEventListener("click", () => {
         const text = inputText.value.trim();
-        if (!text) return;
+        if (!text || !worker) return;
         analyzeBtn.disabled = true;
         analyzeBtn.textContent = "Analyzing...";
         outputAnonymized.innerHTML = '<span class="placeholder-text">Processing...</span>';
@@ -585,7 +606,9 @@ const CATEGORIES = [
           const curr = sorted[i];
 
           const gap = text.slice(prev.end, curr.start);
-          if (prev.entity_group === curr.entity_group && gap.length <= 3 && /^[\s.,;:\-/]*$/.test(gap)) {
+          const overlapping = curr.start <= prev.end;
+          const punctuationBridge = gap.length > 0 && gap.length <= 3 && /^[.,;:\-/]+$/.test(gap);
+          if (prev.entity_group === curr.entity_group && (overlapping || punctuationBridge)) {
             prev.end = curr.end;
             prev.word = text.slice(prev.start, prev.end);
             prev.score = Math.max(prev.score, curr.score);

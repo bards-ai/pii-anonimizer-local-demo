@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 const HF_BASE = "https://huggingface.co";
+const ALLOWED_REPO = "bardsai/eu-pii-anonimization";
 
 export const prerender = false;
 
@@ -10,17 +11,24 @@ export const GET: APIRoute = async ({ params }) => {
     return new Response("Not found", { status: 404 });
   }
 
-  // Only allow requests to the specific model repo
-  if (!path.startsWith("bardsai/eu-pii-anonimization/")) {
+  if (!path.startsWith(ALLOWED_REPO + "/")) {
     return new Response("Forbidden", { status: 403 });
   }
 
-  // Map to HuggingFace resolve URL
-  const modelPath = path.replace(
-    "bardsai/eu-pii-anonimization/",
-    "bardsai/eu-pii-anonimization/resolve/main/"
-  );
-  const url = `${HF_BASE}/${modelPath}`;
+  // Transformers.js remote loading sends: {model_id}/resolve/main/{filename}
+  // Direct local loading sends: {model_id}/{filename}
+  // Handle both patterns
+  let hfPath: string;
+  if (path.includes("/resolve/")) {
+    hfPath = path;
+  } else {
+    hfPath = path.replace(
+      ALLOWED_REPO + "/",
+      ALLOWED_REPO + "/resolve/main/"
+    );
+  }
+
+  const url = `${HF_BASE}/${hfPath}`;
 
   const response = await fetch(url, {
     headers: {
@@ -35,7 +43,6 @@ export const GET: APIRoute = async ({ params }) => {
     });
   }
 
-  // Stream the response back with proper headers
   const contentType =
     response.headers.get("content-type") || "application/octet-stream";
 

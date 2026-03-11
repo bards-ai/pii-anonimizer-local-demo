@@ -33,7 +33,8 @@
 		"check": "astro build && tsc && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "astro dev",
-		"preview": "astro build && wrangler dev"
+		"preview": "astro build && wrangler dev",
+		"test:integration": "node --test tests/*.integration.test.js"
 	},
 	"type": "module"
 }
