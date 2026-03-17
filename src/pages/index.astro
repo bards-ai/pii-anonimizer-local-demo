@@ -351,6 +351,8 @@ const CATEGORIES = [
     <Footer />
 
     <script>
+      import { SentenceSplitterSyntax, split } from "sentence-splitter";
+
       const SAMPLES: Record<string, string> = {
         "1": `Pracownik Anna Wiśniewska, zatrudniona w dziale IT, otrzymuje wynagrodzenie w wysokości 12 500 PLN brutto. Numer paszportu: EP1234567. NIP firmy: 527-020-1234. Adres zamieszkania: ul. Piękna 22, 00-549 Warszawa. Wyznanie: katolicyzm. Przynależność związkowa: NSZZ.`,
         "2": `Nazywam się Jan Kowalski, urodzony 15 marca 1985 roku w Warszawie. Mój numer PESEL to 85031512345, a numer dowodu osobistego ABC123456. Mieszkam przy ul. Marszałkowskiej 10/5, 00-001 Warszawa. Mój adres e-mail to jan.kowalski@example.com, a numer telefonu +48 600 123 456.`,
@@ -404,6 +406,117 @@ const CATEGORIES = [
         ETHNIC_ORIGIN: "cat-special",
         CRIMINAL_OFFENCE_DATA: "cat-special",
       };
+
+      const MAX_WORDS_PER_CHUNK = 200;
+
+      interface TextChunk {
+        text: string;
+        start: number;
+        end: number;
+        wordCount: number;
+      }
+
+      function countWords(value: string): number {
+        const matches = value.trim().match(/\S+/gu);
+        return matches ? matches.length : 0;
+      }
+
+      function splitRangeIntoWordChunks(text: string, start: number, end: number, maxWords: number): TextChunk[] {
+        const rangeText = text.slice(start, end);
+        const wordMatches = Array.from(rangeText.matchAll(/\S+/gu));
+
+        if (wordMatches.length === 0) {
+          return rangeText.trim()
+            ? [{ text: rangeText, start, end, wordCount: countWords(rangeText) }]
+            : [];
+        }
+
+        const chunks: TextChunk[] = [];
+
+        for (let wordIndex = 0; wordIndex < wordMatches.length; wordIndex += maxWords) {
+          const nextWordIndex = Math.min(wordIndex + maxWords, wordMatches.length);
+          const chunkStartLocal = wordIndex === 0 ? 0 : (wordMatches[wordIndex].index ?? 0);
+          const chunkEndLocal = nextWordIndex < wordMatches.length
+            ? (wordMatches[nextWordIndex].index ?? rangeText.length)
+            : rangeText.length;
+
+          chunks.push({
+            text: rangeText.slice(chunkStartLocal, chunkEndLocal),
+            start: start + chunkStartLocal,
+            end: start + chunkEndLocal,
+            wordCount: nextWordIndex - wordIndex,
+          });
+        }
+
+        return chunks;
+      }
+
+      function chunkTextBySentence(text: string, maxWords = MAX_WORDS_PER_CHUNK): TextChunk[] {
+        const nodes = split(text);
+        const sentenceNodes = nodes.filter(
+          (node): node is { type: "Sentence"; raw: string; range: [number, number] } =>
+            node.type === SentenceSplitterSyntax.Sentence && Array.isArray(node.range)
+        );
+
+        if (sentenceNodes.length === 0) {
+          return splitRangeIntoWordChunks(text, 0, text.length, maxWords);
+        }
+
+        const chunks: TextChunk[] = [];
+        let currentStart = -1;
+        let currentEnd = -1;
+        let currentWords = 0;
+
+        const flushCurrent = () => {
+          if (currentStart < 0 || currentEnd <= currentStart) return;
+
+          chunks.push({
+            text: text.slice(currentStart, currentEnd),
+            start: currentStart,
+            end: currentEnd,
+            wordCount: currentWords,
+          });
+
+          currentStart = -1;
+          currentEnd = -1;
+          currentWords = 0;
+        };
+
+        for (const sentence of sentenceNodes) {
+          const [sentenceStart, sentenceEnd] = sentence.range;
+          const sentenceWordCount = countWords(sentence.raw);
+
+          if (sentenceWordCount === 0) continue;
+
+          if (sentenceWordCount > maxWords) {
+            flushCurrent();
+            chunks.push(...splitRangeIntoWordChunks(text, sentenceStart, sentenceEnd, maxWords));
+            continue;
+          }
+
+          if (currentStart < 0) {
+            currentStart = sentenceStart;
+            currentEnd = sentenceEnd;
+            currentWords = sentenceWordCount;
+            continue;
+          }
+
+          if (currentWords + sentenceWordCount > maxWords) {
+            flushCurrent();
+            currentStart = sentenceStart;
+            currentEnd = sentenceEnd;
+            currentWords = sentenceWordCount;
+            continue;
+          }
+
+          currentEnd = sentenceEnd;
+          currentWords += sentenceWordCount;
+        }
+
+        flushCurrent();
+
+        return chunks.length > 0 ? chunks : splitRangeIntoWordChunks(text, 0, text.length, maxWords);
+      }
 
       // Show mobile warning
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
@@ -478,7 +591,10 @@ const CATEGORIES = [
             renderResults(merged);
             analyzeBtn.disabled = false;
             analyzeBtn.textContent = "Analyze";
-            statusText.textContent = "Model loaded and ready!";
+            const chunkCount = e.data.meta?.chunkCount ?? 1;
+            statusText.textContent = chunkCount > 1
+              ? `Analyzed ${chunkCount} chunks. Model loaded and ready!`
+              : "Model loaded and ready!";
 
             // On mobile, terminate worker after inference to free ~300MB WASM memory.
             // Model files are cached in Cache API so re-loading is fast (no re-download).
@@ -519,12 +635,16 @@ const CATEGORIES = [
       analyzeBtn.addEventListener("click", () => {
         const text = inputText.value.trim();
         if (!text || !worker) return;
+        const chunks = chunkTextBySentence(text);
         analyzeBtn.disabled = true;
         analyzeBtn.textContent = "Analyzing...";
         outputAnonymized.innerHTML = '<span class="placeholder-text">Processing...</span>';
         outputHighlighted.innerHTML = "";
         entityList.style.display = "none";
-        worker.postMessage({ type: "classify", text });
+        statusText.textContent = chunks.length > 1
+          ? `Prepared ${chunks.length} chunks for analysis...`
+          : "Analyzing text...";
+        worker.postMessage({ type: "classify", text, chunks });
       });
 
       document.querySelectorAll(".sample-btn").forEach((btn) => {
