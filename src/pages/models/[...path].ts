@@ -46,7 +46,7 @@ export const GET: APIRoute = async ({ params }) => {
     headers: {
       "User-Agent": "pii-anonimizer-demo/1.0",
     },
-    cache: shouldBypassCache ? "no-store" : "default",
+    ...(shouldBypassCache ? { cache: "no-store" as const } : {}),
     redirect: "follow",
   });
 
