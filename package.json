@@ -1,6 +1,6 @@
 {
 	"name": "pii-anonimizer-local-demo",
-	"description": "Browser-based PII anonymization demo using bardsai/eu-pii-anonimization with local inference via Transformers.js",
+	"description": "Browser-based PII anonymization demo using bardsai/eu-pii-anonimization-multilang with local inference via Transformers.js",
 	"cloudflare": {
 		"label": "Astro Framework Starter",
 		"products": [

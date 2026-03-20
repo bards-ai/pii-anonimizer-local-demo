@@ -7,11 +7,14 @@ import { isAnyWhitespace, postprocessTokenResults } from "./worker-lib.js";
 
 // Route through our proxy (same origin, no CORS issues)
 // Using remote mode so Transformers.js caches via Cache API (persists across sessions)
+const HF_REVISION = "327c24b6e6bc54cd3802aef6b4b454abe5dd44cf";
+
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.remoteHost = self.location.origin + "/models/";
+env.remotePathTemplate = `{model}/resolve/${HF_REVISION}/`;
 
-const MODEL_ID = "bardsai/eu-pii-anonimization";
+const MODEL_ID = "bardsai/eu-pii-anonimization-multilang";
 
 // How much to penalize the "O" label logit (higher = more aggressive detection)
 const O_BIAS = -6.0;

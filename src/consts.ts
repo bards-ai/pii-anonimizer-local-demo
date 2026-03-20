@@ -1,6 +1,6 @@
 export const SITE_TITLE = "PII Anonymizer";
 export const SITE_DESCRIPTION =
-  "Browser-based PII detection powered by bardsai/eu-pii-anonimization. All inference runs locally in your browser — no data leaves your device.";
+  "Browser-based PII detection powered by bardsai/eu-pii-anonimization-multilang. All inference runs locally in your browser — no data leaves your device.";
 
 export const NAV_ITEMS = [
   { label: "Demo", href: "/" },

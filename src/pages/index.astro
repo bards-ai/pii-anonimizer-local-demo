@@ -33,35 +33,35 @@ const CATEGORIES = [
           Detect and anonymize personal data before it enters your AI pipeline.
           Covers all PII defined by GDPR Art.&nbsp;4(1), special categories under Art.&nbsp;9(1),
           and meets the anonymization requirements of EU&nbsp;AI&nbsp;Act Art.&nbsp;10(5).
-          Built on <a href="https://huggingface.co/bardsai/eu-pii-anonimization" target="_blank" rel="noopener">bardsai/eu-pii-anonimization</a>,
+          Built on <a href="https://huggingface.co/bardsai/eu-pii-anonimization-multilang" target="_blank" rel="noopener">bardsai/eu-pii-anonimization-multilang</a>,
           an open-source XLM-RoBERTa token classifier running entirely in your browser via ONNX/WebAssembly &mdash; no data leaves your device.
         </p>
         <div class="language-grid">
-          <span class="lang-label">EU languages:</span>
-          <span class="lang-item lang-disabled">🇬🇧 English</span>
+          <span class="lang-label">Supported EU languages:</span>
+          <span class="lang-item lang-active">🇬🇧 English</span>
           <span class="lang-item lang-active">🇵🇱 Polish</span>
-          <span class="lang-item lang-disabled">🇩🇪 German</span>
-          <span class="lang-item lang-disabled">🇫🇷 French</span>
-          <span class="lang-item lang-disabled">🇪🇸 Spanish</span>
-          <span class="lang-item lang-disabled">🇮🇹 Italian</span>
-          <span class="lang-item lang-disabled">🇳🇱 Dutch</span>
-          <span class="lang-item lang-disabled">🇵🇹 Portuguese</span>
-          <span class="lang-item lang-disabled">🇷🇴 Romanian</span>
-          <span class="lang-item lang-disabled">🇨🇿 Czech</span>
-          <span class="lang-item lang-disabled">🇸🇪 Swedish</span>
-          <span class="lang-item lang-disabled">🇬🇷 Greek</span>
-          <span class="lang-item lang-disabled">🇭🇺 Hungarian</span>
-          <span class="lang-item lang-disabled">🇧🇬 Bulgarian</span>
-          <span class="lang-item lang-disabled">🇭🇷 Croatian</span>
-          <span class="lang-item lang-disabled">🇩🇰 Danish</span>
-          <span class="lang-item lang-disabled">🇪🇪 Estonian</span>
-          <span class="lang-item lang-disabled">🇫🇮 Finnish</span>
-          <span class="lang-item lang-disabled">🇮🇪 Irish</span>
-          <span class="lang-item lang-disabled">🇱🇻 Latvian</span>
-          <span class="lang-item lang-disabled">🇱🇹 Lithuanian</span>
-          <span class="lang-item lang-disabled">🇲🇹 Maltese</span>
-          <span class="lang-item lang-disabled">🇸🇰 Slovak</span>
-          <span class="lang-item lang-disabled">🇸🇮 Slovenian</span>
+          <span class="lang-item lang-active">🇩🇪 German</span>
+          <span class="lang-item lang-active">🇫🇷 French</span>
+          <span class="lang-item lang-active">🇪🇸 Spanish</span>
+          <span class="lang-item lang-active">🇮🇹 Italian</span>
+          <span class="lang-item lang-active">🇳🇱 Dutch</span>
+          <span class="lang-item lang-active">🇵🇹 Portuguese</span>
+          <span class="lang-item lang-active">🇷🇴 Romanian</span>
+          <span class="lang-item lang-active">🇨🇿 Czech</span>
+          <span class="lang-item lang-active">🇸🇪 Swedish</span>
+          <span class="lang-item lang-active">🇬🇷 Greek</span>
+          <span class="lang-item lang-active">🇭🇺 Hungarian</span>
+          <span class="lang-item lang-active">🇧🇬 Bulgarian</span>
+          <span class="lang-item lang-active">🇭🇷 Croatian</span>
+          <span class="lang-item lang-active">🇩🇰 Danish</span>
+          <span class="lang-item lang-active">🇪🇪 Estonian</span>
+          <span class="lang-item lang-active">🇫🇮 Finnish</span>
+          <span class="lang-item lang-active">🇮🇪 Irish</span>
+          <span class="lang-item lang-active">🇱🇻 Latvian</span>
+          <span class="lang-item lang-active">🇱🇹 Lithuanian</span>
+          <span class="lang-item lang-active">🇲🇹 Maltese</span>
+          <span class="lang-item lang-active">🇸🇰 Slovak</span>
+          <span class="lang-item lang-active">🇸🇮 Slovenian</span>
         </div>
       </section>
 
@@ -75,7 +75,7 @@ const CATEGORIES = [
                 <div class="progress-bar" id="progress-bar"></div>
               </div>
             </div>
-            <button id="load-btn" class="btn btn-secondary">Download bardsai/eu-pii-anonimization</button>
+            <button id="load-btn" class="btn btn-secondary">Download bardsai/eu-pii-anonimization-multilang</button>
           </div>
           <div class="mobile-warning" id="mobile-warning" style="display:none">
             The model requires ~300 MB of memory. On mobile devices this may cause the browser tab to reload. For best results, use a desktop browser.
@@ -90,7 +90,7 @@ const CATEGORIES = [
                 <button class="btn btn-outline btn-small sample-btn" data-sample="3">Sample 3</button>
               </div>
             </div>
-            <textarea id="input-text" rows="6" placeholder="Wpisz tekst po polsku zawierający dane osobowe...">Pracownik Anna Wiśniewska, zatrudniona w dziale IT, otrzymuje wynagrodzenie w wysokości 12 500 PLN brutto. Numer paszportu: EP1234567. NIP firmy: 527-020-1234. Adres zamieszkania: ul. Piękna 22, 00-549 Warszawa. Wyznanie: katolicyzm. Przynależność związkowa: NSZZ.</textarea>
+            <textarea id="input-text" rows="6" placeholder="Enter English text containing personal data...">Employee Anna Wisniewska, who works in the IT department, receives a gross salary of 12,500 PLN. Passport number: EP1234567. Company tax ID: 527-020-1234. Home address: 22 Piekna Street, 00-549 Warsaw. Religion: Catholicism. Member of the NSZZ Solidarność union.</textarea>
             <button id="analyze-btn" class="btn btn-primary" disabled>Analyze</button>
           </div>
 
@@ -102,11 +102,11 @@ const CATEGORIES = [
                 <button class="toggle-btn active" data-view="highlighted">Highlighted</button>
               </div>
             </div>
-            <div id="output-anonymized" class="output-text" style="display:none">Pracownik <span class="anon-tag cat-identity" title="Was: Anna Wiśniewska (100%)">[PERSON_NAME]</span>, zatrudniona w dziale <span class="anon-tag cat-identity" title="Was: IT (85%)">[PERSON_ROLE_OR_TITLE]</span>, otrzymuje wynagrodzenie w wysokości <span class="anon-tag cat-financial" title="Was: 12 500 PLN brutto (91%)">[FINANCIAL_AMOUNT]</span>. Numer paszportu: <span class="anon-tag cat-identity" title="Was: EP1234567 (64%)">[ORGANIZATION_IDENTIFIER]</span>. NIP firmy: <span class="anon-tag cat-identity" title="Was: 527-020-1234 (100%)">[ORGANIZATION_IDENTIFIER]</span>. Adres zamieszkania: <span class="anon-tag cat-contact" title="Was: ul. Piękna 22, 00-549 (100%)">[POSTAL_ADDRESS]</span> <span class="anon-tag cat-contact" title="Was: Warszawa (89%)">[LOCATION]</span>. Wyznanie: <span class="anon-tag cat-special" title="Was: katolicyzm (100%)">[RELIGION_OR_BELIEF]</span>. Przynależność związkowa: <span class="anon-tag cat-special" title="Was: NSZZ (53%)">[TRADE_UNION_MEMBERSHIP]</span>.</div>
-            <div id="output-highlighted" class="output-text">Pracownik <mark class="entity cat-identity" title="PERSON_NAME (100%)">Anna Wiśniewska<span class="entity-label">PERSON_NAME</span></mark>, zatrudniona w dziale <mark class="entity cat-identity" title="PERSON_ROLE_OR_TITLE (85%)">IT<span class="entity-label">PERSON_ROLE_OR_TITLE</span></mark>, otrzymuje wynagrodzenie w wysokości <mark class="entity cat-financial" title="FINANCIAL_AMOUNT (91%)">12 500 PLN brutto<span class="entity-label">FINANCIAL_AMOUNT</span></mark>. Numer paszportu: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (64%)">EP1234567<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. NIP firmy: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (100%)">527-020-1234<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. Adres zamieszkania: <mark class="entity cat-contact" title="POSTAL_ADDRESS (100%)">ul. Piękna 22, 00-549<span class="entity-label">POSTAL_ADDRESS</span></mark> <mark class="entity cat-contact" title="LOCATION (89%)">Warszawa<span class="entity-label">LOCATION</span></mark>. Wyznanie: <mark class="entity cat-special" title="RELIGION_OR_BELIEF (100%)">katolicyzm<span class="entity-label">RELIGION_OR_BELIEF</span></mark>. Przynależność związkowa: <mark class="entity cat-special" title="TRADE_UNION_MEMBERSHIP (53%)">NSZZ<span class="entity-label">TRADE_UNION_MEMBERSHIP</span></mark>.</div>
+            <div id="output-anonymized" class="output-text" style="display:none">Employee <span class="anon-tag cat-identity" title="Was: Anna Wisniewska (100%)">[PERSON_NAME]</span>, who works in the <span class="anon-tag cat-identity" title="Was: IT (85%)">[PERSON_ROLE_OR_TITLE]</span> department, receives a gross salary of <span class="anon-tag cat-financial" title="Was: 12,500 PLN (91%)">[FINANCIAL_AMOUNT]</span>. Passport number: <span class="anon-tag cat-identity" title="Was: EP1234567 (64%)">[ORGANIZATION_IDENTIFIER]</span>. Company tax ID: <span class="anon-tag cat-identity" title="Was: 527-020-1234 (100%)">[ORGANIZATION_IDENTIFIER]</span>. Home address: <span class="anon-tag cat-contact" title="Was: 22 Piekna Street, 00-549 (100%)">[POSTAL_ADDRESS]</span> <span class="anon-tag cat-contact" title="Was: Warsaw (89%)">[LOCATION]</span>. Religion: <span class="anon-tag cat-special" title="Was: Catholicism (100%)">[RELIGION_OR_BELIEF]</span>. Member of the <span class="anon-tag cat-special" title="Was: NSZZ Solidarność (53%)">[TRADE_UNION_MEMBERSHIP]</span> union.</div>
+            <div id="output-highlighted" class="output-text">Employee <mark class="entity cat-identity" title="PERSON_NAME (100%)">Anna Wisniewska<span class="entity-label">PERSON_NAME</span></mark>, who works in the <mark class="entity cat-identity" title="PERSON_ROLE_OR_TITLE (85%)">IT<span class="entity-label">PERSON_ROLE_OR_TITLE</span></mark> department, receives a gross salary of <mark class="entity cat-financial" title="FINANCIAL_AMOUNT (91%)">12,500 PLN<span class="entity-label">FINANCIAL_AMOUNT</span></mark>. Passport number: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (64%)">EP1234567<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. Company tax ID: <mark class="entity cat-identity" title="ORGANIZATION_IDENTIFIER (100%)">527-020-1234<span class="entity-label">ORGANIZATION_IDENTIFIER</span></mark>. Home address: <mark class="entity cat-contact" title="POSTAL_ADDRESS (100%)">22 Piekna Street, 00-549<span class="entity-label">POSTAL_ADDRESS</span></mark> <mark class="entity cat-contact" title="LOCATION (89%)">Warsaw<span class="entity-label">LOCATION</span></mark>. Religion: <mark class="entity cat-special" title="RELIGION_OR_BELIEF (100%)">Catholicism<span class="entity-label">RELIGION_OR_BELIEF</span></mark>. Member of the <mark class="entity cat-special" title="TRADE_UNION_MEMBERSHIP (53%)">NSZZ Solidarność<span class="entity-label">TRADE_UNION_MEMBERSHIP</span></mark> union.</div>
             <div id="entity-list" class="entity-list">
               <h4>Detected Entities</h4>
-              <div id="entity-table-container"><table class="results-table"><thead><tr><th>Entity</th><th>Type</th><th>Regulation</th><th class="col-confidence">Confidence</th></tr></thead><tbody><tr><td><span class="entity-badge cat-identity">Anna Wiśniewska</span></td><td><code>PERSON_NAME</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-identity">IT</span></td><td><code>PERSON_ROLE_OR_TITLE</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">85%</td></tr><tr><td><span class="entity-badge cat-financial">12 500 PLN brutto</span></td><td><code>FINANCIAL_AMOUNT</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">91%</td></tr><tr><td><span class="entity-badge cat-identity">EP1234567</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">64%</td></tr><tr><td><span class="entity-badge cat-identity">527-020-1234</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">ul. Piękna 22, 00-549</span></td><td><code>POSTAL_ADDRESS</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">Warszawa</span></td><td><code>LOCATION</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">89%</td></tr><tr><td><span class="entity-badge cat-special">katolicyzm</span></td><td><code>RELIGION_OR_BELIEF</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-special">NSZZ</span></td><td><code>TRADE_UNION_MEMBERSHIP</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">53%</td></tr></tbody></table></div>
+              <div id="entity-table-container"><table class="results-table"><thead><tr><th>Entity</th><th>Type</th><th>Regulation</th><th class="col-confidence">Confidence</th></tr></thead><tbody><tr><td><span class="entity-badge cat-identity">Anna Wisniewska</span></td><td><code>PERSON_NAME</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-identity">IT</span></td><td><code>PERSON_ROLE_OR_TITLE</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">85%</td></tr><tr><td><span class="entity-badge cat-financial">12,500 PLN</span></td><td><code>FINANCIAL_AMOUNT</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">91%</td></tr><tr><td><span class="entity-badge cat-identity">EP1234567</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">64%</td></tr><tr><td><span class="entity-badge cat-identity">527-020-1234</span></td><td><code>ORGANIZATION_IDENTIFIER</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">22 Piekna Street, 00-549</span></td><td><code>POSTAL_ADDRESS</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-contact">Warsaw</span></td><td><code>LOCATION</code></td><td><span class="reg-ref">Art. 4(1)</span></td><td class="col-confidence">89%</td></tr><tr><td><span class="entity-badge cat-special">Catholicism</span></td><td><code>RELIGION_OR_BELIEF</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">100%</td></tr><tr><td><span class="entity-badge cat-special">NSZZ Solidarność</span></td><td><code>TRADE_UNION_MEMBERSHIP</code></td><td><span class="reg-ref reg-special">Art. 9(1)</span></td><td class="col-confidence">53%</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@ const CATEGORIES = [
                 <div class="step-marker">1</div>
                 <div class="step-content">
                   <div class="step-title">Original prompt</div>
-                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl">Jan Kowalski</span>, NIP <span class="hl">527-020-1234</span>, adres <span class="hl">ul. Marszałkowska 10/5, 00-001 Warszawa</span>, konto <span class="hl">PL61 1090 1014 0000 0712 1981 2874</span>, kwota <span class="hl">12 500 PLN</span></code>
+                  <code class="step-code">Extract the invoice details: issued to <span class="hl">John Kowalski</span>, tax ID <span class="hl">527-020-1234</span>, address <span class="hl">10/5 Marszalkowska Street, 00-001 Warsaw</span>, account <span class="hl">PL61 1090 1014 0000 0712 1981 2874</span>, amount <span class="hl">12,500 PLN</span></code>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ const CATEGORIES = [
                 <div class="step-marker">2</div>
                 <div class="step-content">
                   <div class="step-title">Anonymized prompt</div>
-                  <code class="step-code">Wyciągnij dane z faktury: wystawiona dla <span class="hl-token">[PERSON_NAME_1]</span>, NIP <span class="hl-token">[ORGANIZATION_IDENTIFIER_1]</span>, adres <span class="hl-token">[POSTAL_ADDRESS_1]</span>, konto <span class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</span>, kwota <span class="hl-token">[FINANCIAL_AMOUNT_1]</span></code>
+                  <code class="step-code">Extract the invoice details: issued to <span class="hl-token">[PERSON_NAME_1]</span>, tax ID <span class="hl-token">[ORGANIZATION_IDENTIFIER_1]</span>, address <span class="hl-token">[POSTAL_ADDRESS_1]</span>, account <span class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</span>, amount <span class="hl-token">[FINANCIAL_AMOUNT_1]</span></code>
                 </div>
               </div>
             </div>
@@ -257,7 +257,7 @@ const CATEGORIES = [
                 <div class="step-marker">4</div>
                 <div class="step-content">
                   <div class="step-title">Final result</div>
-                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl">Jan Kowalski</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl">527-020-1234</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl">ul. Marszałkowska 10/5, ...</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl">PL61 1090 ... 2874</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl">12 500 PLN</span>"<br/>{"}"}</code>
+                  <code class="step-code step-code-mono">{"{"}<br/>&nbsp;&nbsp;"vendor": "<span class="hl">John Kowalski</span>",<br/>&nbsp;&nbsp;"tax_id": "<span class="hl">527-020-1234</span>",<br/>&nbsp;&nbsp;"address": "<span class="hl">10/5 Marszalkowska Street, ...</span>",<br/>&nbsp;&nbsp;"iban": "<span class="hl">PL61 1090 ... 2874</span>",<br/>&nbsp;&nbsp;"amount": "<span class="hl">12,500 PLN</span>"<br/>{"}"}</code>
                 </div>
               </div>
             </div>
@@ -268,11 +268,11 @@ const CATEGORIES = [
         <div class="usecase-mapping">
           <div class="mapping-label">Entity mapping (stored locally, never sent)</div>
           <div class="mapping-table">
-            <code class="hl-token">[PERSON_NAME_1]</code><span class="mapping-sep">↔</span><code>Jan Kowalski</code>
+            <code class="hl-token">[PERSON_NAME_1]</code><span class="mapping-sep">↔</span><code>John Kowalski</code>
             <code class="hl-token">[ORGANIZATION_IDENTIFIER_1]</code><span class="mapping-sep">↔</span><code>527-020-1234</code>
-            <code class="hl-token">[POSTAL_ADDRESS_1]</code><span class="mapping-sep">↔</span><code>ul. Marszałkowska 10/5, ...</code>
+            <code class="hl-token">[POSTAL_ADDRESS_1]</code><span class="mapping-sep">↔</span><code>10/5 Marszalkowska Street, ...</code>
             <code class="hl-token">[BANK_ACCOUNT_IDENTIFIER_1]</code><span class="mapping-sep">↔</span><code>PL61 1090 ... 2874</code>
-            <code class="hl-token">[FINANCIAL_AMOUNT_1]</code><span class="mapping-sep">↔</span><code>12 500 PLN</code>
+            <code class="hl-token">[FINANCIAL_AMOUNT_1]</code><span class="mapping-sep">↔</span><code>12,500 PLN</code>
           </div>
         </div>
       </section>
@@ -287,7 +287,7 @@ const CATEGORIES = [
             <div class="step-marker">1</div>
             <div class="step-content">
               <div class="step-title">Original training record</div>
-              <code class="step-code">Pacjent <span class="hl">Emil Nowak</span> (PESEL: <span class="hl">91082734567</span>), zam. <span class="hl">ul. Lipowa 22, 30-702 Kraków</span>, zgłosił się z <span class="hl-special">bólem w klatce piersiowej</span>. Lekarz prowadzący: <span class="hl">dr Anna Wiśniewska</span>.</code>
+              <code class="step-code">Patient <span class="hl">Emil Nowak</span> (national ID: <span class="hl">91082734567</span>), living at <span class="hl">22 Lipowa Street, 30-702 Krakow</span>, presented with <span class="hl-special">chest pain</span>. Attending physician: <span class="hl">Dr. Anna Wisniewska</span>.</code>
             </div>
           </div>
 
@@ -297,7 +297,7 @@ const CATEGORIES = [
             <div class="step-marker">2</div>
             <div class="step-content">
               <div class="step-title">Anonymized training record</div>
-              <code class="step-code">Pacjent <span class="hl-synth">Tomasz Zieliński</span> (PESEL: <span class="hl-synth">85120498321</span>), zam. <span class="hl-synth">ul. Dębowa 7, 50-307 Wrocław</span>, zgłosił się z <span class="hl-synth">bólem głowy</span>. Lekarz prowadzący: <span class="hl-synth">dr Katarzyna Lewandowska</span>.</code>
+              <code class="step-code">Patient <span class="hl-synth">Thomas Zielinski</span> (national ID: <span class="hl-synth">85120498321</span>), living at <span class="hl-synth">7 Debowa Street, 50-307 Wroclaw</span>, presented with <span class="hl-synth">headache</span>. Attending physician: <span class="hl-synth">Dr. Katarzyna Lewandowska</span>.</code>
             </div>
           </div>
 
@@ -315,11 +315,11 @@ const CATEGORIES = [
         <div class="usecase-mapping">
           <div class="mapping-label">Each record gets unique synthetic replacements</div>
           <div class="mapping-table">
-            <code><span class="hl">Emil Nowak</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">Tomasz Zieliński</span></code>
+            <code><span class="hl">Emil Nowak</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">Thomas Zielinski</span></code>
             <code><span class="hl">91082734567</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">85120498321</span></code>
-            <code><span class="hl">ul. Lipowa 22, ...</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">ul. Dębowa 7, ...</span></code>
-            <code><span class="hl-special">ból w klatce piersiowej</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">ból głowy</span></code>
-            <code><span class="hl">dr Anna Wiśniewska</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">dr K. Lewandowska</span></code>
+            <code><span class="hl">22 Lipowa Street, ...</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">7 Debowa Street, ...</span></code>
+            <code><span class="hl-special">chest pain</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">headache</span></code>
+            <code><span class="hl">Dr. Anna Wisniewska</span></code><span class="mapping-sep">→</span><code><span class="hl-synth">Dr. K. Lewandowska</span></code>
           </div>
         </div>
       </section>
@@ -334,7 +334,7 @@ const CATEGORIES = [
           <strong>Model card</strong>
           <span>Architecture, ~95% F1, limitations</span>
         </a>
-        <a href="https://huggingface.co/bardsai/eu-pii-anonimization" target="_blank" rel="noopener" class="link-card card">
+        <a href="https://huggingface.co/bardsai/eu-pii-anonimization-multilang" target="_blank" rel="noopener" class="link-card card">
           <strong>HuggingFace</strong>
           <span>Download model, weights, tokenizer</span>
         </a>
@@ -354,9 +354,9 @@ const CATEGORIES = [
       import { SentenceSplitterSyntax, split } from "sentence-splitter";
 
       const SAMPLES: Record<string, string> = {
-        "1": `Pracownik Anna Wiśniewska, zatrudniona w dziale IT, otrzymuje wynagrodzenie w wysokości 12 500 PLN brutto. Numer paszportu: EP1234567. NIP firmy: 527-020-1234. Adres zamieszkania: ul. Piękna 22, 00-549 Warszawa. Wyznanie: katolicyzm. Przynależność związkowa: NSZZ.`,
-        "2": `Nazywam się Jan Kowalski, urodzony 15 marca 1985 roku w Warszawie. Mój numer PESEL to 85031512345, a numer dowodu osobistego ABC123456. Mieszkam przy ul. Marszałkowskiej 10/5, 00-001 Warszawa. Mój adres e-mail to jan.kowalski@example.com, a numer telefonu +48 600 123 456.`,
-        "3": `Pacjent Adam Nowak (PESEL: 90010112345) zgłosił się do kliniki z rozpoznaniem cukrzycy typu 2. Numer ubezpieczenia zdrowotnego: NFZ-WA-123456789. Rachunek bankowy do zwrotu kosztów: PL61 1090 1014 0000 0712 1981 2874. Adres IP urządzenia pacjenta: 192.168.1.105.`,
+        "1": `Employee Anna Wisniewska, who works in the IT department, receives a gross salary of 12,500 PLN. Passport number: EP1234567. Company tax ID: 527-020-1234. Home address: 22 Piekna Street, 00-549 Warsaw. Religion: Catholicism. Member of the NSZZ Solidarność union.`,
+        "2": `My name is John Kowalski, born on 15 March 1985 in Warsaw. My national ID number is 85031512345, and my identity card number is ABC123456. I live at 10/5 Marszalkowska Street, 00-001 Warsaw. My email address is john.kowalski@example.com, and my phone number is +48 600 123 456.`,
+        "3": `Patient Adam Nowak (national ID: 90010112345) was admitted to the clinic with a diagnosis of type 2 diabetes. Health insurance number: NFZ-WA-123456789. Bank account for reimbursement: PL61 1090 1014 0000 0712 1981 2874. Patient device IP address: 192.168.1.105.`,
       };
 
       const REGULATION_MAP: Record<string, string> = {

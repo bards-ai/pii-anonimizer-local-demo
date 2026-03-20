@@ -1,6 +1,6 @@
 ---
 title: "Integration Guide"
-description: "Python, JavaScript, and ONNX usage examples for bardsai/eu-pii-anonimization"
+description: "Python, JavaScript, and ONNX usage examples for bardsai/eu-pii-anonimization-multilang"
 order: 3
 ---
 
@@ -18,7 +18,7 @@ from transformers import pipeline
 # Load the NER pipeline
 ner = pipeline(
     "token-classification",
-    model="bardsai/eu-pii-anonimization",
+    model="bardsai/eu-pii-anonimization-multilang",
     aggregation_strategy="simple"
 )
 
@@ -62,7 +62,7 @@ import { pipeline } from "@huggingface/transformers";
 // Load the pipeline (downloads model on first run)
 const ner = await pipeline(
   "token-classification",
-  "bardsai/eu-pii-anonimization"
+  "bardsai/eu-pii-anonimization-multilang"
 );
 
 // Run inference
@@ -86,7 +86,7 @@ self.onmessage = async (e) => {
   if (e.data.type === "load") {
     ner = await pipeline(
       "token-classification",
-      "bardsai/eu-pii-anonimization",
+      "bardsai/eu-pii-anonimization-multilang",
       { dtype: "q8" }  // Use quantized model
     );
     self.postMessage({ type: "loaded" });
@@ -111,9 +111,9 @@ from transformers import AutoTokenizer
 from optimum.onnxruntime import ORTModelForTokenClassification
 
 # Load model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained("bardsai/eu-pii-anonimization")
+tokenizer = AutoTokenizer.from_pretrained("bardsai/eu-pii-anonimization-multilang")
 model = ORTModelForTokenClassification.from_pretrained(
-    "bardsai/eu-pii-anonimization"
+    "bardsai/eu-pii-anonimization-multilang"
 )
 
 # Tokenize and run

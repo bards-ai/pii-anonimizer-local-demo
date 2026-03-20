@@ -1,5 +1,5 @@
 """
-Convert bardsai/eu-pii-anonimization to ONNX format for browser inference.
+Convert bardsai/eu-pii-anonimization-multilang to ONNX format for browser inference.
 
 Usage:
     pip install optimum[onnxruntime]
@@ -15,7 +15,7 @@ from optimum.onnxruntime import ORTModelForTokenClassification, ORTQuantizer
 from optimum.onnxruntime.configuration import AutoQuantizationConfig
 from pathlib import Path
 
-MODEL_ID = "bardsai/eu-pii-anonimization"
+MODEL_ID = "bardsai/eu-pii-anonimization-multilang"
 OUTPUT_DIR = Path("./onnx_model")
 QUANTIZED_DIR = Path("./onnx_model_quantized")
 
